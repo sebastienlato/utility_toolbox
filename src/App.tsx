@@ -46,7 +46,8 @@ const App = () => {
 
       <footer className="border-t border-white/10 px-6 py-4 text-center text-sm text-slate-400 backdrop-blur">
         <div className="mx-auto w-full max-w-6xl">
-          Built with React, Vite, and Tailwind — © {new Date().getFullYear()}
+          Built with React, Vite, and Tailwind — LatoDev ©{" "}
+          {new Date().getFullYear()}
         </div>
       </footer>
     </div>

@@ -1,60 +1,60 @@
-import { useCallback, useMemo, useRef, useState } from 'react'
-import PrimaryButton from '../../../components/PrimaryButton'
-import PageHeader from '../../../components/PageHeader'
-import { backgroundRemovalService } from '../../../services/backgroundRemovalService'
+import { useCallback, useMemo, useRef, useState } from "react";
+import PrimaryButton from "../../../components/PrimaryButton";
+import PageHeader from "../../../components/PageHeader";
+import { backgroundRemovalService } from "../../../services/backgroundRemovalService";
 
-type Status = 'idle' | 'processing' | 'ready' | 'error'
+type Status = "idle" | "processing" | "ready" | "error";
 
 const BackgroundRemovalPage = () => {
-  const [status, setStatus] = useState<Status>('idle')
-  const [error, setError] = useState<string | null>(null)
-  const [originalPreview, setOriginalPreview] = useState<string | null>(null)
-  const [processedPreview, setProcessedPreview] = useState<string | null>(null)
-  const inputRef = useRef<HTMLInputElement | null>(null)
+  const [status, setStatus] = useState<Status>("idle");
+  const [error, setError] = useState<string | null>(null);
+  const [originalPreview, setOriginalPreview] = useState<string | null>(null);
+  const [processedPreview, setProcessedPreview] = useState<string | null>(null);
+  const inputRef = useRef<HTMLInputElement | null>(null);
 
   const resetState = () => {
-    setError(null)
-    setProcessedPreview(null)
-    setStatus('idle')
-  }
+    setError(null);
+    setProcessedPreview(null);
+    setStatus("idle");
+  };
 
   const handleFiles = useCallback(async (files: FileList | null) => {
-    if (!files?.length) return
-    resetState()
+    if (!files?.length) return;
+    resetState();
 
-    const file = files[0]
-    setOriginalPreview(URL.createObjectURL(file))
+    const file = files[0];
+    setOriginalPreview(URL.createObjectURL(file));
 
     try {
-      setStatus('processing')
-      const result = await backgroundRemovalService.process(file)
-      setProcessedPreview(result.processedUrl)
-      setStatus('ready')
+      setStatus("processing");
+      const result = await backgroundRemovalService.process(file);
+      setProcessedPreview(result.processedUrl);
+      setStatus("ready");
     } catch (err) {
-      console.error(err)
-      setError('Something went wrong while processing the image.')
-      setStatus('error')
+      console.error(err);
+      setError("Something went wrong while processing the image.");
+      setStatus("error");
     }
-  }, [])
+  }, []);
 
   const onDrop = useCallback(
     (event: React.DragEvent<HTMLDivElement>) => {
-      event.preventDefault()
-      handleFiles(event.dataTransfer.files)
+      event.preventDefault();
+      handleFiles(event.dataTransfer.files);
     },
-    [handleFiles],
-  )
+    [handleFiles]
+  );
 
   const onDragOver = useCallback((event: React.DragEvent<HTMLDivElement>) => {
-    event.preventDefault()
-  }, [])
+    event.preventDefault();
+  }, []);
 
   const statusLabel = useMemo(() => {
-    if (status === 'processing') return 'Processing…'
-    if (status === 'ready') return 'Done'
-    if (status === 'error') return 'Error'
-    return 'Waiting for upload'
-  }, [status])
+    if (status === "processing") return "Processing…";
+    if (status === "ready") return "Done";
+    if (status === "error") return "Error";
+    return "Waiting for upload";
+  }, [status]);
 
   return (
     <section className="space-y-10">
@@ -90,20 +90,24 @@ const BackgroundRemovalPage = () => {
         </div>
 
         <div className="space-y-6">
-          <PreviewPanel title="Original" imageUrl={originalPreview} status={status} />
+          <PreviewPanel
+            title="Original"
+            imageUrl={originalPreview}
+            status={status}
+          />
           <PreviewPanel
             title="Processed"
             imageUrl={processedPreview}
             status={status}
             footer={
-              status === 'ready' ? (
+              status === "ready" ? (
                 <PrimaryButton
                   onClick={() => {
-                    if (!processedPreview) return
-                    const link = document.createElement('a')
-                    link.href = processedPreview
-                    link.download = 'processed-image.png'
-                    link.click()
+                    if (!processedPreview) return;
+                    const link = document.createElement("a");
+                    link.href = processedPreview;
+                    link.download = "processed-image.png";
+                    link.click();
                   }}
                 >
                   Download result
@@ -115,24 +119,29 @@ const BackgroundRemovalPage = () => {
         </div>
       </div>
     </section>
-  )
-}
+  );
+};
 
 type PreviewPanelProps = {
-  title: string
-  imageUrl: string | null
-  status: Status
-  footer?: React.ReactNode
-}
+  title: string;
+  imageUrl: string | null;
+  status: Status;
+  footer?: React.ReactNode;
+};
 
-const PreviewPanel = ({ title, imageUrl, status, footer }: PreviewPanelProps) => {
+const PreviewPanel = ({
+  title,
+  imageUrl,
+  status,
+  footer,
+}: PreviewPanelProps) => {
   const renderState = () => {
-    if (status === 'processing') {
+    if (status === "processing") {
       return (
         <div className="grid min-h-[220px] place-items-center rounded-2xl border border-white/10 bg-white/5 text-slate-400">
           Processing…
         </div>
-      )
+      );
     }
 
     if (imageUrl) {
@@ -144,15 +153,15 @@ const PreviewPanel = ({ title, imageUrl, status, footer }: PreviewPanelProps) =>
             className="max-h-full max-w-full rounded-xl object-contain"
           />
         </div>
-      )
+      );
     }
 
     return (
       <div className="grid min-h-[220px] place-items-center rounded-2xl border border-dashed border-white/10 text-sm text-slate-500">
         No image yet
       </div>
-    )
-  }
+    );
+  };
 
   return (
     <div className="glass-card space-y-3 p-6">
@@ -165,7 +174,7 @@ const PreviewPanel = ({ title, imageUrl, status, footer }: PreviewPanelProps) =>
       {renderState()}
       {footer ?? null}
     </div>
-  )
-}
+  );
+};
 
-export default BackgroundRemovalPage
+export default BackgroundRemovalPage;

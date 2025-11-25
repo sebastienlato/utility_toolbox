@@ -1,6 +1,6 @@
-import PageHeader from '../../components/PageHeader'
-import ToolCard from '../../components/ToolCard'
-import { tools } from '../tools/toolRegistry'
+import PageHeader from "../../components/PageHeader";
+import ToolCard from "../../components/ToolCard";
+import { tools } from "../tools/toolRegistry";
 
 const HomePage = () => {
   return (
@@ -30,7 +30,9 @@ const HomePage = () => {
       <div>
         <div className="mb-6 flex items-center justify-between">
           <h2 className="text-xl font-semibold text-white">Available tools</h2>
-          <p className="text-sm text-slate-400">Select a tool to jump right in.</p>
+          <p className="text-sm text-slate-400">
+            Select a tool to jump right in.
+          </p>
         </div>
         <div className="grid gap-6 md:grid-cols-2">
           {tools.map((tool) => (
@@ -46,7 +48,7 @@ const HomePage = () => {
         </div>
       </div>
     </section>
-  )
-}
+  );
+};
 
-export default HomePage
+export default HomePage;
