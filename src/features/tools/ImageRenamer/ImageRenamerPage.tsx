@@ -210,7 +210,7 @@ const extractFilesFromDataTransfer = async (dataTransfer: DataTransfer): Promise
   const items = Array.from(dataTransfer.items ?? [])
   const entryPromises = items
     .map((item) => (item as DataTransferItem & { webkitGetAsEntry?: () => FileSystemEntry | null }).webkitGetAsEntry?.())
-    .filter((entry): entry is FileSystemEntry => Boolean(entry))
+    .filter((entry): entry is FileSystemEntry => entry != null)
     .map((entry) => readEntry(entry))
 
   if (!entryPromises.length) {
@@ -223,8 +223,9 @@ const extractFilesFromDataTransfer = async (dataTransfer: DataTransfer): Promise
 
 const readEntry = (entry: FileSystemEntry): Promise<File[]> => {
   if (entry.isFile) {
+    const fileEntry = entry as FileSystemFileEntry
     return new Promise((resolve, reject) => {
-      entry.file(
+      fileEntry.file(
         (file) => resolve([file]),
         (error) => reject(error),
       )
@@ -232,7 +233,7 @@ const readEntry = (entry: FileSystemEntry): Promise<File[]> => {
   }
 
   if (entry.isDirectory) {
-    return readDirectory(entry)
+    return readDirectory(entry as FileSystemDirectoryEntry)
   }
 
   return Promise.resolve([])
@@ -264,24 +265,3 @@ const readDirectory = (entry: FileSystemDirectoryEntry): Promise<File[]> =>
 
     readEntries()
   })
-
-type FileSystemEntry = FileSystemFileEntry | FileSystemDirectoryEntry
-
-type FileSystemFileEntry = {
-  isFile: true
-  isDirectory: false
-  file: (successCallback: (file: File) => void, errorCallback?: (error: DOMException) => void) => void
-}
-
-type FileSystemDirectoryEntry = {
-  isFile: false
-  isDirectory: true
-  createReader: () => FileSystemDirectoryReader
-}
-
-type FileSystemDirectoryReader = {
-  readEntries: (
-    successCallback: (entries: FileSystemEntry[]) => void,
-    errorCallback?: (error: DOMException) => void,
-  ) => void
-}

@@ -35,6 +35,13 @@ const getExtension = (name: string) => {
   return match ? match[1] : ''
 }
 
+const generateId = () => {
+  if (typeof globalThis.crypto !== 'undefined' && typeof globalThis.crypto.randomUUID === 'function') {
+    return globalThis.crypto.randomUUID()
+  }
+  return `${Date.now()}-${Math.random().toString(16).slice(2)}`
+}
+
 const useImageRenamer = () => {
   const [pattern, setPattern] = useState<PatternState>(defaultPattern)
   const [files, setFiles] = useState<InternalFile[]>([])
@@ -49,7 +56,7 @@ const useImageRenamer = () => {
     setFiles((prev) => [
       ...prev,
       ...accepted.map((file) => ({
-        id: globalThis.crypto?.randomUUID ? crypto.randomUUID() : `${file.name}-${Date.now()}`,
+        id: generateId(),
         file,
         originalName: file.name,
         previewUrl: URL.createObjectURL(file),
