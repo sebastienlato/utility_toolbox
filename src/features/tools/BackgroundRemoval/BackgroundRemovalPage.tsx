@@ -129,7 +129,7 @@ const PreviewPanel = ({ title, imageUrl, status, footer }: PreviewPanelProps) =>
   const renderState = () => {
     if (status === 'processing') {
       return (
-        <div className="grid h-64 place-items-center rounded-2xl border border-white/10 bg-white/5 text-slate-400">
+        <div className="grid min-h-[220px] place-items-center rounded-2xl border border-white/10 bg-white/5 text-slate-400">
           Processing…
         </div>
       )
@@ -137,14 +137,18 @@ const PreviewPanel = ({ title, imageUrl, status, footer }: PreviewPanelProps) =>
 
     if (imageUrl) {
       return (
-        <div className="rounded-2xl border border-white/10 bg-slate-900/70 p-3">
-          <img src={imageUrl} alt={`${title} preview`} className="h-64 w-full rounded-xl object-cover" />
+        <div className="relative flex min-h-[220px] items-center justify-center rounded-2xl border border-white/10 bg-slate-900/70 p-3">
+          <img
+            src={imageUrl}
+            alt={`${title} preview`}
+            className="max-h-full max-w-full rounded-xl object-contain"
+          />
         </div>
       )
     }
 
     return (
-      <div className="grid h-64 place-items-center rounded-2xl border border-dashed border-white/10 text-sm text-slate-500">
+      <div className="grid min-h-[220px] place-items-center rounded-2xl border border-dashed border-white/10 text-sm text-slate-500">
         No image yet
       </div>
     )
