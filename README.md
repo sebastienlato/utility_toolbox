@@ -1,73 +1,33 @@
-# React + TypeScript + Vite
+# Useful Tools
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Useful Tools is a Vite + React + Tailwind SPA that bundles four production-ready utilities:
 
-Currently, two official plugins are available:
+- **Background Removal** — drag & drop images, preview the original and processed output (mocked service today, API-ready).
+- **Image Renamer** — batch rename files with patterns, folder uploads, and optional PNG/JPEG conversion.
+- **Image Resizer** — resize one or many images client-side with canvas, dimension controls, and download links.
+- **QR Code Generator** — type URLs or text, tweak size/error correction, preview, and download/copy the QR.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## Getting Started
 
-## React Compiler
+```bash
+# install dependencies
+npm install
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+# run the Vite dev server
+npm run dev
 
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
-
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+# type-check + build production assets
+npm run build
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+Tailwind is auto-imported via `src/index.css`, and the dev server is available at `http://localhost:5173`.
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+## Tools at a Glance
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+- **Home Hub (`/`)** – lists all tools using the shared registry so new additions appear automatically.
+- **Background Removal (`/background-removal`)** – upload + preview UI with loading/error states and download button; swap in a real API later.
+- **Image Renamer (`/image-renamer`)** – drop files or folders, tweak base name/index/delimiter/output format, preview original → new names, download individually or all.
+- **Image Resizer (`/image-resizer`)** – queue images, set width/height, preserve aspect ratio, pick PNG/JPEG, and download resized results with size summaries.
+- **QR Code Generator (`/qr-code-generator`)** – text/URL input, size + error correction controls, live QR preview, download PNG, copy input.
+
+Each tool lives under `src/features/tools/*`, and shared UI (buttons, cards, headers) sits in `src/components/`.

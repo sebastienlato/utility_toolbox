@@ -19,50 +19,42 @@ The app is a single-page application: the homepage lists tools, and each tool ha
 
 ## High-level Structure
 
-Target structure (TypeScript version shown, use `.jsx` if project is JS):
+Current structure:
 
 ```txt
 src/
-  main.(tsx|jsx)
-  App.(tsx|jsx)
+  main.tsx
+  App.tsx
+  index.css             # imports Tailwind + CSS tokens
 
   components/
-    layout/
-      AppLayout.(tsx|jsx)
-      Header.(tsx|jsx)
-      Footer.(tsx|jsx)
-    ui/
-      ToolCard.(tsx|jsx)
-      Button.(tsx|jsx)
-      Badge.(tsx|jsx)
+    PageHeader.tsx
+    PrimaryButton.tsx
+    ToolCard.tsx
 
   features/
     home/
-      HomePage.(tsx|jsx)
+      HomePage.tsx
 
     tools/
-      toolRegistry.(ts|js)       # central metadata for tools
+      toolRegistry.ts
 
       BackgroundRemoval/
-        BackgroundRemovalPage.(tsx|jsx)
+        BackgroundRemovalPage.tsx
 
       ImageRenamer/
-        ImageRenamerPage.(tsx|jsx)
-        useImageRenamer.(ts|js)
+        ImageRenamerPage.tsx
+        useImageRenamer.ts
 
       ImageResizer/
-        ImageResizerPage.(tsx|jsx)
-        imageResizeService.(ts|js)
+        ImageResizerPage.tsx
 
       QrCodeGenerator/
-        QrCodeGeneratorPage.(tsx|jsx)
+        QrCodeGeneratorPage.tsx
 
   services/
-    backgroundRemovalService.(ts|js)
-    imageResizeService.(ts|js)
-
-  styles/
-    (optional) helper files if needed, but Tailwind is primary
+    backgroundRemovalService.ts
+    imageResizeService.ts
 ```
 
 Routing is configured in `App.(tsx|jsx)` (or in a dedicated routes file) using `react-router-dom`.
@@ -151,53 +143,49 @@ Wraps the entire app with:
 - Props: `name`, `description`, `badge`, `status`, `href`
 - Styled with Tailwind for a modern glassy look (backdrop blur, gradients)
 
-## How to Add a New Tool
+## Adding a New Tool
 
-### Create the Feature Folder
+1. **Create a feature folder**
 
-```txt
-src/features/tools/ImageCompressor/
-ImageCompressorPage.(tsx|jsx)
-```
+   ```
+   src/features/tools/ImageCompressor/
+     ImageCompressorPage.tsx
+     useImageCompressor.ts (optional)
+   ```
 
-### Register the Route
+2. **Add the route**
 
-```tsx
-import { ImageCompressorPage } from "./features/tools/ImageCompressor/ImageCompressorPage";
+   ```tsx
+   import ImageCompressorPage from './features/tools/ImageCompressor/ImageCompressorPage'
 
-<Route path="/image-compressor" element={<ImageCompressorPage />} />;
-```
+   <Route path="/image-compressor" element={<ImageCompressorPage />} />
+   ```
 
-## Add to the Tool Registry
+3. **Extend the registry (`src/features/tools/toolRegistry.ts`)**
 
-```ts
-tools.push({
-  id: "image-compressor",
-  name: "Image Compressor",
-  slug: "/image-compressor",
-  shortDescription: "Compress images to smaller file sizes.",
-  category: "Images",
-  status: "experimental",
-});
-```
+   ```ts
+   tools.push({
+     id: 'image-compressor',
+     name: 'Image Compressor',
+     description: 'Reduce file sizes while keeping quality high.',
+     path: '/image-compressor',
+     category: 'Images',
+     status: 'experimental',
+   })
+   ```
 
-The Home page automatically shows it.
+   The Home page imports `tools` and will automatically render a card with the metadata.
 
-### (Optional) Add Services
+4. **Wire services if needed**
 
-```txt
-src/services/imageCompressorService.(ts|js)
-```
+   - Add to `src/services/` (e.g., `imageCompressorService.ts`) or co-locate hooks in the feature folder.
+   - Keep async logic inside services/hooks so pages stay declarative.
 
-or:
+## TODOs / Future Tools
 
-```txt
-src/features/tools/ImageCompressor/useImageCompressor.(ts|js)
-```
-
-## Extra Dependencies
-
-Install only what the tool needs
+- TODO: Image Compressor (optimize size without resizes).
+- TODO: Advanced Text utilities (slug generator, case converter).
+- TODO: Batch watermarking tool.
 
 Keep dependencies minimal
 
