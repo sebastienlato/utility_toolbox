@@ -5,6 +5,7 @@ A React + Vite + Tailwind **tool hub** called **“Useful Tools”**.
 - You (Codex) are working **inside an already-created Vite + Tailwind project**.
 - **Do not** create or re-create the project, Vite config, Tailwind config, or package.json from scratch.
 - Detect whether the project uses **TypeScript or JavaScript** from existing files and remain consistent.
+- Follow phases in order, and stop after each phase once the ‘Stop after’ conditions are met.
 
 The app should:
 
