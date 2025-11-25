@@ -1,7 +1,6 @@
 # Codex Prompt — Useful Tools
 
 You are Codex working inside an existing **React + Vite + Tailwind** project named **Useful Tools**.
-Follow phases in order, and stop after each phase once the ‘Stop after’ conditions are met.
 
 ## Context & Constraints
 
