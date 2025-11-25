@@ -1,257 +1,288 @@
-import { useEffect, useMemo, useRef, useState } from 'react'
-import { QRCodeCanvas, QRCodeSVG } from 'qrcode.react'
-import PageHeader from '../../../components/PageHeader'
-import PrimaryButton from '../../../components/PrimaryButton'
+import { useEffect, useMemo, useRef, useState } from "react";
+import { QRCodeCanvas, QRCodeSVG } from "qrcode.react";
+import PageHeader from "../../../components/PageHeader";
+import PrimaryButton from "../../../components/PrimaryButton";
 
 const errorLevels = [
-  { label: 'Low (L)', value: 'L' },
-  { label: 'Medium (M)', value: 'M' },
-  { label: 'Quality (Q)', value: 'Q' },
-  { label: 'High (H)', value: 'H' },
-] as const
+  { label: "Low (L)", value: "L" },
+  { label: "Medium (M)", value: "M" },
+  { label: "Quality (Q)", value: "Q" },
+  { label: "High (H)", value: "H" },
+] as const;
 
-const sizePresets = [128, 256, 512, 768, 1024]
-const previewSize = 320
+const sizePresets = [128, 256, 512, 768, 1024];
+const previewSize = 320;
 
-type ContentType = 'url' | 'email' | 'text'
-type ErrorLevel = (typeof errorLevels)[number]['value']
+type ContentType = "url" | "email" | "text";
+type ErrorLevel = (typeof errorLevels)[number]["value"];
 
 const contentTypes: Array<{ label: string; value: ContentType }> = [
-  { label: 'URL', value: 'url' },
-  { label: 'Email', value: 'email' },
-  { label: 'Text', value: 'text' },
-]
+  { label: "URL", value: "url" },
+  { label: "Email", value: "email" },
+  { label: "Text", value: "text" },
+];
 
 const loadImage = (src: string) =>
   new Promise<HTMLImageElement>((resolve, reject) => {
-    const image = new Image()
-    image.crossOrigin = 'anonymous'
-    image.onload = () => resolve(image)
-    image.onerror = (event) => reject(event)
-    image.src = src
-  })
+    const image = new Image();
+    image.crossOrigin = "anonymous";
+    image.onload = () => resolve(image);
+    image.onerror = (event) => reject(event);
+    image.src = src;
+  });
 
 const toDataUrl = async (src: string): Promise<string> => {
-  const response = await fetch(src)
-  const blob = await response.blob()
+  const response = await fetch(src);
+  const blob = await response.blob();
   return new Promise((resolve, reject) => {
-    const reader = new FileReader()
-    reader.onloadend = () => resolve(reader.result as string)
-    reader.onerror = reject
-    reader.readAsDataURL(blob)
-  })
-}
+    const reader = new FileReader();
+    reader.onloadend = () => resolve(reader.result as string);
+    reader.onerror = reject;
+    reader.readAsDataURL(blob);
+  });
+};
 
 const QrCodeGeneratorPage = () => {
-  const [contentType, setContentType] = useState<ContentType>('url')
-  const [urlValue, setUrlValue] = useState('')
-  const [emailValue, setEmailValue] = useState('')
-  const [textValue, setTextValue] = useState('')
+  const [contentType, setContentType] = useState<ContentType>("url");
+  const [urlValue, setUrlValue] = useState("");
+  const [emailValue, setEmailValue] = useState("");
+  const [textValue, setTextValue] = useState("");
 
-  const [size, setSize] = useState(320)
-  const [quietZone, setQuietZone] = useState(24)
-  const [errorLevel, setErrorLevel] = useState<ErrorLevel>('M')
+  const [size, setSize] = useState(320);
+  const [quietZone, setQuietZone] = useState(24);
+  const [errorLevel, setErrorLevel] = useState<ErrorLevel>("M");
 
-  const [fgColor, setFgColor] = useState('#0f172a')
-  const [bgColor, setBgColor] = useState('#f8fafc')
-  const [transparentBg, setTransparentBg] = useState(false)
+  const [fgColor, setFgColor] = useState("#0f172a");
+  const [bgColor, setBgColor] = useState("#f8fafc");
+  const [transparentBg, setTransparentBg] = useState(false);
 
-  const [logoFile, setLogoFile] = useState<File | null>(null)
-  const [logoUrl, setLogoUrl] = useState<string | null>(null)
-  const logoInputRef = useRef<HTMLInputElement | null>(null)
+  const [logoFile, setLogoFile] = useState<File | null>(null);
+  const [logoUrl, setLogoUrl] = useState<string | null>(null);
+  const logoInputRef = useRef<HTMLInputElement | null>(null);
 
-  const canvasRef = useRef<HTMLCanvasElement | null>(null)
-  const svgRef = useRef<SVGSVGElement | null>(null)
+  const canvasRef = useRef<HTMLCanvasElement | null>(null);
+  const svgRef = useRef<SVGSVGElement | null>(null);
 
   useEffect(() => {
     return () => {
       if (logoUrl) {
-        URL.revokeObjectURL(logoUrl)
+        URL.revokeObjectURL(logoUrl);
       }
-    }
-  }, [logoUrl])
+    };
+  }, [logoUrl]);
 
   const { qrValue, validationMessage } = useMemo(() => {
-    if (contentType === 'url') {
-      const trimmed = urlValue.trim()
+    if (contentType === "url") {
+      const trimmed = urlValue.trim();
       if (!trimmed) {
-        return { qrValue: '', validationMessage: 'URL cannot be empty.' }
+        return { qrValue: "", validationMessage: "URL cannot be empty." };
       }
-      const hasProtocol = /^[a-zA-Z]+:\/\//.test(trimmed)
-      const domainPattern = /^[\w.-]+\.[a-z]{2,}/i
+      const hasProtocol = /^[a-zA-Z]+:\/\//.test(trimmed);
+      const domainPattern = /^[\w.-]+\.[a-z]{2,}/i;
       if (!hasProtocol && !domainPattern.test(trimmed)) {
-        return { qrValue: '', validationMessage: 'Please enter a valid URL.' }
+        return { qrValue: "", validationMessage: "Please enter a valid URL." };
       }
-      const value = hasProtocol ? trimmed : `https://${trimmed}`
-      return { qrValue: value, validationMessage: '' }
+      const value = hasProtocol ? trimmed : `https://${trimmed}`;
+      return { qrValue: value, validationMessage: "" };
     }
-    if (contentType === 'email') {
-      const trimmed = emailValue.trim()
+    if (contentType === "email") {
+      const trimmed = emailValue.trim();
       if (!trimmed) {
-        return { qrValue: '', validationMessage: 'Email cannot be empty.' }
+        return { qrValue: "", validationMessage: "Email cannot be empty." };
       }
       if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(trimmed)) {
-        return { qrValue: '', validationMessage: 'Please enter a valid email.' }
+        return {
+          qrValue: "",
+          validationMessage: "Please enter a valid email.",
+        };
       }
-      return { qrValue: `mailto:${trimmed}`, validationMessage: '' }
+      return { qrValue: `mailto:${trimmed}`, validationMessage: "" };
     }
 
-    const trimmed = textValue.trim()
+    const trimmed = textValue.trim();
     if (!trimmed) {
-      return { qrValue: '', validationMessage: 'Text cannot be empty.' }
+      return { qrValue: "", validationMessage: "Text cannot be empty." };
     }
-    return { qrValue: trimmed, validationMessage: '' }
-  }, [contentType, urlValue, emailValue, textValue])
+    return { qrValue: trimmed, validationMessage: "" };
+  }, [contentType, urlValue, emailValue, textValue]);
 
-  const isValid = Boolean(qrValue) && !validationMessage
+  const isValid = Boolean(qrValue) && !validationMessage;
 
   const placeholder = useMemo(() => {
-    if (contentType === 'url') return 'e.g. your-domain.com/product'
-    if (contentType === 'email') return 'team@usefultools.dev'
-    return 'Enter any text content you want to encode...'
-  }, [contentType])
+    if (contentType === "url") return "e.g. your-domain.com/product";
+    if (contentType === "email") return "team@usefultools.dev";
+    return "Enter any text content you want to encode...";
+  }, [contentType]);
 
   const currentInputValue =
-    contentType === 'url' ? urlValue : contentType === 'email' ? emailValue : textValue
+    contentType === "url"
+      ? urlValue
+      : contentType === "email"
+      ? emailValue
+      : textValue;
 
   const handleInputChange = (value: string) => {
-    if (contentType === 'url') setUrlValue(value)
-    else if (contentType === 'email') setEmailValue(value)
-    else setTextValue(value)
-  }
+    if (contentType === "url") setUrlValue(value);
+    else if (contentType === "email") setEmailValue(value);
+    else setTextValue(value);
+  };
 
   const handleLogoUpload = (file: File | null) => {
-    if (!file) return
+    if (!file) return;
     if (logoUrl) {
-      URL.revokeObjectURL(logoUrl)
+      URL.revokeObjectURL(logoUrl);
     }
-    const nextUrl = URL.createObjectURL(file)
-    setLogoFile(file)
-    setLogoUrl(nextUrl)
-  }
+    const nextUrl = URL.createObjectURL(file);
+    setLogoFile(file);
+    setLogoUrl(nextUrl);
+  };
 
   const clearLogo = () => {
     if (logoUrl) {
-      URL.revokeObjectURL(logoUrl)
+      URL.revokeObjectURL(logoUrl);
     }
-    setLogoFile(null)
-    setLogoUrl(null)
+    setLogoFile(null);
+    setLogoUrl(null);
     if (logoInputRef.current) {
-      logoInputRef.current.value = ''
+      logoInputRef.current.value = "";
     }
-  }
+  };
 
   const handleCopy = async () => {
-    if (!isValid) return
-    await navigator.clipboard.writeText(qrValue)
-  }
+    if (!isValid) return;
+    await navigator.clipboard.writeText(qrValue);
+  };
 
-  const exportSize = size
-  const innerExportSize = Math.max(size - quietZone * 2, 1)
+  const exportSize = size;
+  const innerExportSize = Math.max(size - quietZone * 2, 1);
 
   const downloadPng = async () => {
-    if (!canvasRef.current || !isValid) return
+    if (!canvasRef.current || !isValid) return;
 
-    const baseCanvas = canvasRef.current
-    const outputCanvas = document.createElement('canvas')
-    outputCanvas.width = exportSize
-    outputCanvas.height = exportSize
-    const ctx = outputCanvas.getContext('2d')
-    if (!ctx) return
+    const baseCanvas = canvasRef.current;
+    const outputCanvas = document.createElement("canvas");
+    outputCanvas.width = exportSize;
+    outputCanvas.height = exportSize;
+    const ctx = outputCanvas.getContext("2d");
+    if (!ctx) return;
 
     if (!transparentBg) {
-      ctx.fillStyle = bgColor
-      ctx.fillRect(0, 0, exportSize, exportSize)
+      ctx.fillStyle = bgColor;
+      ctx.fillRect(0, 0, exportSize, exportSize);
     } else {
-      ctx.clearRect(0, 0, exportSize, exportSize)
+      ctx.clearRect(0, 0, exportSize, exportSize);
     }
 
-    ctx.drawImage(baseCanvas, quietZone, quietZone, innerExportSize, innerExportSize)
+    ctx.drawImage(
+      baseCanvas,
+      quietZone,
+      quietZone,
+      innerExportSize,
+      innerExportSize
+    );
 
     if (logoUrl) {
       try {
-        const logoImage = await loadImage(logoUrl)
-        const logoSize = innerExportSize * 0.22
-        const offset = (exportSize - logoSize) / 2
-        ctx.drawImage(logoImage, offset, offset, logoSize, logoSize)
+        const logoImage = await loadImage(logoUrl);
+        const logoSize = innerExportSize * 0.22;
+        const offset = (exportSize - logoSize) / 2;
+        ctx.drawImage(logoImage, offset, offset, logoSize, logoSize);
       } catch (error) {
-        console.warn('Unable to draw logo on QR export', error)
+        console.warn("Unable to draw logo on QR export", error);
       }
     }
 
-    const link = document.createElement('a')
-    link.href = outputCanvas.toDataURL('image/png')
-    link.download = 'qr-code.png'
-    link.click()
-  }
+    const link = document.createElement("a");
+    link.href = outputCanvas.toDataURL("image/png");
+    link.download = "qr-code.png";
+    link.click();
+  };
 
   const downloadSvg = async () => {
-    if (!svgRef.current || !isValid) return
-    const svgNode = svgRef.current.cloneNode(true) as SVGSVGElement
+    if (!svgRef.current || !isValid) return;
+    const svgNode = svgRef.current.cloneNode(true) as SVGSVGElement;
 
-    svgNode.removeAttribute('style')
-    const viewBoxAttr = svgNode.getAttribute('viewBox') ?? `0 0 ${innerExportSize} ${innerExportSize}`
-    const [baseMinX = 0, baseMinY = 0, baseWidth = innerExportSize, baseHeight = innerExportSize] = viewBoxAttr
-      .split(' ')
-      .map((num) => parseFloat(num))
+    svgNode.removeAttribute("style");
+    const viewBoxAttr =
+      svgNode.getAttribute("viewBox") ??
+      `0 0 ${innerExportSize} ${innerExportSize}`;
+    const [
+      baseMinX = 0,
+      baseMinY = 0,
+      baseWidth = innerExportSize,
+      baseHeight = innerExportSize,
+    ] = viewBoxAttr.split(" ").map((num) => parseFloat(num));
 
-    const unitsPerPxX = baseWidth / innerExportSize
-    const unitsPerPxY = baseHeight / innerExportSize
-    const quietUnitsX = quietZone * unitsPerPxX
-    const quietUnitsY = quietZone * unitsPerPxY
-    const newMinX = baseMinX - quietUnitsX
-    const newMinY = baseMinY - quietUnitsY
-    const newWidth = baseWidth + quietUnitsX * 2
-    const newHeight = baseHeight + quietUnitsY * 2
+    const unitsPerPxX = baseWidth / innerExportSize;
+    const unitsPerPxY = baseHeight / innerExportSize;
+    const quietUnitsX = quietZone * unitsPerPxX;
+    const quietUnitsY = quietZone * unitsPerPxY;
+    const newMinX = baseMinX - quietUnitsX;
+    const newMinY = baseMinY - quietUnitsY;
+    const newWidth = baseWidth + quietUnitsX * 2;
+    const newHeight = baseHeight + quietUnitsY * 2;
 
-    svgNode.setAttribute('width', `${exportSize}`)
-    svgNode.setAttribute('height', `${exportSize}`)
-    svgNode.setAttribute('viewBox', `${newMinX} ${newMinY} ${newWidth} ${newHeight}`)
-    svgNode.setAttribute('preserveAspectRatio', 'xMidYMid meet')
+    svgNode.setAttribute("width", `${exportSize}`);
+    svgNode.setAttribute("height", `${exportSize}`);
+    svgNode.setAttribute(
+      "viewBox",
+      `${newMinX} ${newMinY} ${newWidth} ${newHeight}`
+    );
+    svgNode.setAttribute("preserveAspectRatio", "xMidYMid meet");
 
     if (!transparentBg) {
-      const rect = document.createElementNS('http://www.w3.org/2000/svg', 'rect')
-      rect.setAttribute('x', `${newMinX}`)
-      rect.setAttribute('y', `${newMinY}`)
-      rect.setAttribute('width', `${newWidth}`)
-      rect.setAttribute('height', `${newHeight}`)
-      rect.setAttribute('fill', bgColor)
-      svgNode.insertBefore(rect, svgNode.firstChild)
+      const rect = document.createElementNS(
+        "http://www.w3.org/2000/svg",
+        "rect"
+      );
+      rect.setAttribute("x", `${newMinX}`);
+      rect.setAttribute("y", `${newMinY}`);
+      rect.setAttribute("width", `${newWidth}`);
+      rect.setAttribute("height", `${newHeight}`);
+      rect.setAttribute("fill", bgColor);
+      svgNode.insertBefore(rect, svgNode.firstChild);
     }
 
     if (logoUrl) {
       try {
-        const embeddedLogo = await toDataUrl(logoUrl)
-        const logoSizePx = innerExportSize * 0.22
-        const logoSizeUnits = logoSizePx * unitsPerPxX
-        const logoX = newMinX + (newWidth - logoSizeUnits) / 2
-        const logoY = newMinY + (newHeight - logoSizeUnits) / 2
+        const embeddedLogo = await toDataUrl(logoUrl);
+        const logoSizePx = innerExportSize * 0.22;
+        const logoSizeUnits = logoSizePx * unitsPerPxX;
+        const logoX = newMinX + (newWidth - logoSizeUnits) / 2;
+        const logoY = newMinY + (newHeight - logoSizeUnits) / 2;
 
-        const imageElement = document.createElementNS('http://www.w3.org/2000/svg', 'image')
-        imageElement.setAttributeNS('http://www.w3.org/1999/xlink', 'href', embeddedLogo)
-        imageElement.setAttribute('x', `${logoX}`)
-        imageElement.setAttribute('y', `${logoY}`)
-        imageElement.setAttribute('width', `${logoSizeUnits}`)
-        imageElement.setAttribute('height', `${logoSizeUnits}`)
-        imageElement.setAttribute('preserveAspectRatio', 'xMidYMid meet')
-        svgNode.appendChild(imageElement)
+        const imageElement = document.createElementNS(
+          "http://www.w3.org/2000/svg",
+          "image"
+        );
+        imageElement.setAttributeNS(
+          "http://www.w3.org/1999/xlink",
+          "href",
+          embeddedLogo
+        );
+        imageElement.setAttribute("x", `${logoX}`);
+        imageElement.setAttribute("y", `${logoY}`);
+        imageElement.setAttribute("width", `${logoSizeUnits}`);
+        imageElement.setAttribute("height", `${logoSizeUnits}`);
+        imageElement.setAttribute("preserveAspectRatio", "xMidYMid meet");
+        svgNode.appendChild(imageElement);
       } catch (error) {
-        console.warn('Unable to embed logo into SVG', error)
+        console.warn("Unable to embed logo into SVG", error);
       }
     }
 
-    const serializer = new XMLSerializer()
-    const svgString = serializer.serializeToString(svgNode)
-    const blob = new Blob([svgString], { type: 'image/svg+xml;charset=utf-8' })
-    const url = URL.createObjectURL(blob)
-    const link = document.createElement('a')
-    link.href = url
-    link.download = 'qr-code.svg'
-    link.click()
-    setTimeout(() => URL.revokeObjectURL(url), 1500)
-  }
+    const serializer = new XMLSerializer();
+    const svgString = serializer.serializeToString(svgNode);
+    const blob = new Blob([svgString], { type: "image/svg+xml;charset=utf-8" });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = "qr-code.svg";
+    link.click();
+    setTimeout(() => URL.revokeObjectURL(url), 1500);
+  };
 
-  const previewBackground = transparentBg ? 'transparent' : bgColor
+  const previewBackground = transparentBg ? "transparent" : bgColor;
 
   return (
     <section className="space-y-10">
@@ -274,11 +305,11 @@ const QrCodeGeneratorPage = () => {
                   type="button"
                   onClick={() => setContentType(value)}
                   className={[
-                    'rounded-full border px-4 py-1 text-sm transition',
+                    "rounded-full border px-4 py-1 text-sm transition",
                     contentType === value
-                      ? 'border-emerald-400/60 bg-emerald-400/10 text-white'
-                      : 'border-white/10 bg-white/5 text-slate-300 hover:border-white/30 hover:text-white',
-                  ].join(' ')}
+                      ? "border-emerald-400/60 bg-emerald-400/10 text-white"
+                      : "border-white/10 bg-white/5 text-slate-300 hover:border-white/30 hover:text-white",
+                  ].join(" ")}
                 >
                   {label}
                 </button>
@@ -288,8 +319,12 @@ const QrCodeGeneratorPage = () => {
 
           <div className="space-y-2">
             <label className="text-sm text-slate-300">
-              {contentType === 'text' ? 'Text content' : contentType === 'email' ? 'Email address' : 'URL'}
-              {contentType === 'text' ? (
+              {contentType === "text"
+                ? "Text content"
+                : contentType === "email"
+                ? "Email address"
+                : "URL"}
+              {contentType === "text" ? (
                 <textarea
                   value={currentInputValue}
                   onChange={(event) => handleInputChange(event.target.value)}
@@ -310,11 +345,11 @@ const QrCodeGeneratorPage = () => {
               <p className="text-xs text-amber-300">{validationMessage}</p>
             ) : (
               <p className="text-xs text-slate-400">
-                {contentType === 'url'
-                  ? 'Tip: protocols like https:// are added if missing.'
-                  : contentType === 'email'
-                    ? 'Encodes as mailto: so scanners can email you instantly.'
-                    : 'Plain text is great for short messages, IDs, or promo codes.'}
+                {contentType === "url"
+                  ? "Tip: protocols like https:// are added if missing."
+                  : contentType === "email"
+                  ? "Encodes as mailto: so scanners can email you instantly."
+                  : "Plain text is great for short messages, IDs, or promo codes."}
               </p>
             )}
           </div>
@@ -322,7 +357,9 @@ const QrCodeGeneratorPage = () => {
           <div className="space-y-5 rounded-2xl border border-white/10 bg-white/5 p-4">
             <div className="flex items-center justify-between text-sm text-slate-300">
               <span>Export width: {exportSize}px</span>
-              <span className="text-xs text-slate-400">QR modules: {innerExportSize}px</span>
+              <span className="text-xs text-slate-400">
+                QR modules: {innerExportSize}px
+              </span>
               <div className="flex flex-wrap gap-2">
                 {sizePresets.map((preset) => (
                   <button
@@ -330,11 +367,11 @@ const QrCodeGeneratorPage = () => {
                     type="button"
                     onClick={() => setSize(preset)}
                     className={[
-                      'rounded-full border px-2 py-0.5 text-xs',
+                      "rounded-full border px-2 py-0.5 text-xs",
                       size === preset
-                        ? 'border-emerald-400/60 bg-emerald-400/10 text-white'
-                        : 'border-white/10 text-slate-300 hover:border-white/30 hover:text-white',
-                    ].join(' ')}
+                        ? "border-emerald-400/60 bg-emerald-400/10 text-white"
+                        : "border-white/10 text-slate-300 hover:border-white/30 hover:text-white",
+                    ].join(" ")}
                   >
                     {preset}
                   </button>
@@ -368,7 +405,9 @@ const QrCodeGeneratorPage = () => {
 
           <div className="space-y-4 rounded-2xl border border-white/10 bg-white/5 p-4">
             <div>
-              <p className="mb-2 text-sm font-semibold text-white">Error correction</p>
+              <p className="mb-2 text-sm font-semibold text-white">
+                Error correction
+              </p>
               <div className="grid grid-cols-2 gap-2 sm:flex sm:flex-wrap">
                 {errorLevels.map((level) => (
                   <button
@@ -376,11 +415,11 @@ const QrCodeGeneratorPage = () => {
                     type="button"
                     onClick={() => setErrorLevel(level.value)}
                     className={[
-                      'rounded-full border px-4 py-1 text-sm transition',
+                      "rounded-full border px-4 py-1 text-sm transition",
                       errorLevel === level.value
-                        ? 'border-emerald-400/60 bg-emerald-400/10 text-white'
-                        : 'border-white/10 bg-white/5 text-slate-300 hover:border-white/30 hover:text-white',
-                    ].join(' ')}
+                        ? "border-emerald-400/60 bg-emerald-400/10 text-white"
+                        : "border-white/10 bg-white/5 text-slate-300 hover:border-white/30 hover:text-white",
+                    ].join(" ")}
                   >
                     {level.label}
                   </button>
@@ -432,13 +471,15 @@ const QrCodeGeneratorPage = () => {
                       type="button"
                       onClick={() => setTransparentBg((previous) => !previous)}
                       className={[
-                        'rounded-full border px-3 py-1 text-xs transition',
+                        "rounded-full border px-3 py-1 text-xs transition",
                         transparentBg
-                          ? 'border-emerald-400/60 bg-emerald-400/10 text-white'
-                          : 'border-white/15 text-slate-300 hover:border-white/30 hover:text-white',
-                      ].join(' ')}
+                          ? "border-emerald-400/60 bg-emerald-400/10 text-white"
+                          : "border-white/15 text-slate-300 hover:border-white/30 hover:text-white",
+                      ].join(" ")}
                     >
-                      {transparentBg ? 'Transparent background enabled' : 'Enable transparent background'}
+                      {transparentBg
+                        ? "Transparent background enabled"
+                        : "Enable transparent background"}
                     </button>
                   </div>
                 </label>
@@ -464,25 +505,37 @@ const QrCodeGeneratorPage = () => {
                 type="file"
                 accept="image/png,image/jpeg,image/svg+xml"
                 className="hidden"
-                onChange={(event) => handleLogoUpload(event.target.files?.[0] ?? null)}
+                onChange={(event) =>
+                  handleLogoUpload(event.target.files?.[0] ?? null)
+                }
               />
-              <p className="text-sm text-slate-300">Drop a logo or pick a PNG, JPG, or SVG file.</p>
+              <p className="text-sm text-slate-300">
+                Drop a logo or pick a PNG, JPG, or SVG file.
+              </p>
               <div className="flex flex-col items-center gap-3">
                 {logoUrl ? (
-                  <img src={logoUrl} alt="Logo preview" className="h-16 w-16 rounded-xl border border-white/10 object-contain" />
+                  <img
+                    src={logoUrl}
+                    alt="Logo preview"
+                    className="h-16 w-16 rounded-xl border border-white/10 object-contain"
+                  />
                 ) : (
                   <div className="h-16 w-16 rounded-xl border border-dashed border-white/15 text-xs text-slate-500">
-                    <div className="flex h-full items-center justify-center">No logo</div>
+                    <div className="flex h-full items-center justify-center">
+                      No logo
+                    </div>
                   </div>
                 )}
                 {logoFile ? (
                   <p className="text-xs text-slate-400">{logoFile.name}</p>
                 ) : (
-                  <p className="text-xs text-slate-500">Recommended: square logo</p>
+                  <p className="text-xs text-slate-500">
+                    Recommended: square logo
+                  </p>
                 )}
               </div>
               <PrimaryButton onClick={() => logoInputRef.current?.click()}>
-                {logoUrl ? 'Replace logo' : 'Upload logo'}
+                {logoUrl ? "Replace logo" : "Upload logo"}
               </PrimaryButton>
             </div>
           </div>
@@ -529,7 +582,7 @@ const QrCodeGeneratorPage = () => {
                     size={previewSize}
                     level={errorLevel}
                     includeMargin={false}
-                    bgColor={transparentBg ? '#00000000' : bgColor}
+                    bgColor={transparentBg ? "#00000000" : bgColor}
                     fgColor={fgColor}
                   />
                   {logoUrl ? (
@@ -542,7 +595,8 @@ const QrCodeGeneratorPage = () => {
                 </div>
               </div>
               <p className="text-center text-sm text-slate-400">
-                {exportSize}px export · Error level {errorLevel} · Quiet zone {quietZone}px
+                {exportSize}px export · Error level {errorLevel} · Quiet zone{" "}
+                {quietZone}px
               </p>
             </>
           ) : (
@@ -550,33 +604,35 @@ const QrCodeGeneratorPage = () => {
               Enter content to preview a QR code
             </div>
           )}
-          <div style={{ position: 'absolute', opacity: 0, pointerEvents: 'none' }}>
+          <div
+            style={{ position: "absolute", opacity: 0, pointerEvents: "none" }}
+          >
             <QRCodeSVG
               ref={svgRef}
-              value={qrValue || ' '}
+              value={qrValue || " "}
               size={innerExportSize}
               level={errorLevel}
               includeMargin={false}
-              bgColor={transparentBg ? '#00000000' : bgColor}
+              bgColor={transparentBg ? "#00000000" : bgColor}
               fgColor={fgColor}
             />
           </div>
           <QRCodeCanvas
             ref={(node) => {
-              canvasRef.current = node
+              canvasRef.current = node;
             }}
-            value={qrValue || ' '}
+            value={qrValue || " "}
             size={innerExportSize}
             level={errorLevel}
             includeMargin={false}
-            bgColor={transparentBg ? '#00000000' : bgColor}
+            bgColor={transparentBg ? "#00000000" : bgColor}
             fgColor={fgColor}
-            style={{ position: 'absolute', opacity: 0, pointerEvents: 'none' }}
+            style={{ position: "absolute", opacity: 0, pointerEvents: "none" }}
           />
         </div>
       </div>
     </section>
-  )
-}
+  );
+};
 
-export default QrCodeGeneratorPage
+export default QrCodeGeneratorPage;

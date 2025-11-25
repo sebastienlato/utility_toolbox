@@ -1,10 +1,10 @@
-import { useCallback, useRef } from 'react'
-import PageHeader from '../../../components/PageHeader'
-import PrimaryButton from '../../../components/PrimaryButton'
-import useImageRenamer, { type OutputFormat } from './useImageRenamer'
+import { useCallback, useRef } from "react";
+import PageHeader from "../../../components/PageHeader";
+import PrimaryButton from "../../../components/PrimaryButton";
+import useImageRenamer, { type OutputFormat } from "./useImageRenamer";
 
 const ImageRenamerPage = () => {
-  const inputRef = useRef<HTMLInputElement | null>(null)
+  const inputRef = useRef<HTMLInputElement | null>(null);
   const {
     pattern,
     renamedFiles,
@@ -16,26 +16,28 @@ const ImageRenamerPage = () => {
     clearFiles,
     outputFormat,
     setOutputFormat,
-  } = useImageRenamer()
+  } = useImageRenamer();
 
-  const hasFiles = renamedFiles.length > 0
+  const hasFiles = renamedFiles.length > 0;
 
   const onDrop = useCallback(
     async (event: React.DragEvent<HTMLDivElement>) => {
-      event.preventDefault()
-      const filesFromEntries = await extractFilesFromDataTransfer(event.dataTransfer)
+      event.preventDefault();
+      const filesFromEntries = await extractFilesFromDataTransfer(
+        event.dataTransfer
+      );
       if (filesFromEntries.length) {
-        addFiles(filesFromEntries)
+        addFiles(filesFromEntries);
       } else {
-        addFiles(event.dataTransfer.files)
+        addFiles(event.dataTransfer.files);
       }
     },
-    [addFiles],
-  )
+    [addFiles]
+  );
 
   const onDragOver = useCallback((event: React.DragEvent<HTMLDivElement>) => {
-    event.preventDefault()
-  }, [])
+    event.preventDefault();
+  }, []);
 
   return (
     <section className="space-y-10">
@@ -57,10 +59,10 @@ const ImageRenamerPage = () => {
           >
             <input
               ref={(node) => {
-                inputRef.current = node
+                inputRef.current = node;
                 if (node) {
-                  node.setAttribute('webkitdirectory', '')
-                  node.setAttribute('directory', '')
+                  node.setAttribute("webkitdirectory", "");
+                  node.setAttribute("directory", "");
                 }
               }}
               type="file"
@@ -70,18 +72,24 @@ const ImageRenamerPage = () => {
               onChange={(event) => addFiles(event.target.files ?? undefined)}
             />
             <div className="space-y-4">
-              <p className="text-2xl font-semibold text-white">Drop your images or folders</p>
+              <p className="text-2xl font-semibold text-white">
+                Drop your images or folders
+              </p>
               <p className="text-sm text-slate-400">
                 PNG, JPG, WebP supported — drag entire folders or pick files.
               </p>
             </div>
             <p className="mt-6 text-xs uppercase tracking-[0.4em] text-emerald-300/80">
-              {hasFiles ? `${renamedFiles.length} file(s) ready` : 'Waiting for files'}
+              {hasFiles
+                ? `${renamedFiles.length} file(s) ready`
+                : "Waiting for files"}
             </p>
           </div>
 
           <div className="glass-card p-8">
-            <h2 className="mb-6 text-lg font-semibold text-white">Naming pattern</h2>
+            <h2 className="mb-6 text-lg font-semibold text-white">
+              Naming pattern
+            </h2>
             <div className="grid gap-6 md:grid-cols-4">
               <div className="space-y-2">
                 <label className="text-sm text-slate-300">
@@ -89,7 +97,9 @@ const ImageRenamerPage = () => {
                   <input
                     type="text"
                     value={pattern.baseName}
-                    onChange={(event) => updatePattern('baseName', event.target.value)}
+                    onChange={(event) =>
+                      updatePattern("baseName", event.target.value)
+                    }
                     placeholder="holiday-photo"
                     className="mt-1 w-full rounded-2xl border border-white/10 bg-slate-900/60 px-4 py-2 text-sm text-white placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-emerald-400/70"
                   />
@@ -102,7 +112,9 @@ const ImageRenamerPage = () => {
                     type="number"
                     min={0}
                     value={pattern.startIndex}
-                    onChange={(event) => updatePattern('startIndex', Number(event.target.value))}
+                    onChange={(event) =>
+                      updatePattern("startIndex", Number(event.target.value))
+                    }
                     className="mt-1 w-full rounded-2xl border border-white/10 bg-slate-900/60 px-4 py-2 text-sm text-white focus:outline-none focus:ring-2 focus:ring-emerald-400/70"
                   />
                 </label>
@@ -113,7 +125,9 @@ const ImageRenamerPage = () => {
                   <input
                     type="text"
                     value={pattern.delimiter}
-                    onChange={(event) => updatePattern('delimiter', event.target.value)}
+                    onChange={(event) =>
+                      updatePattern("delimiter", event.target.value)
+                    }
                     placeholder="-"
                     className="mt-1 w-full rounded-2xl border border-white/10 bg-slate-900/60 px-4 py-2 text-sm text-white focus:outline-none focus:ring-2 focus:ring-emerald-400/70"
                   />
@@ -124,7 +138,9 @@ const ImageRenamerPage = () => {
                   Output format
                   <select
                     value={outputFormat}
-                    onChange={(event) => setOutputFormat(event.target.value as OutputFormat)}
+                    onChange={(event) =>
+                      setOutputFormat(event.target.value as OutputFormat)
+                    }
                     className="mt-1 w-full rounded-2xl border border-white/10 bg-slate-900/60 px-4 py-2 text-sm text-white focus:outline-none focus:ring-2 focus:ring-emerald-400/70"
                   >
                     <option value="original">Keep original</option>
@@ -135,7 +151,10 @@ const ImageRenamerPage = () => {
               </div>
             </div>
             <div className="mt-6 flex flex-wrap gap-3">
-              <PrimaryButton onClick={() => void downloadAll()} disabled={!hasFiles}>
+              <PrimaryButton
+                onClick={() => void downloadAll()}
+                disabled={!hasFiles}
+              >
                 Download all
               </PrimaryButton>
               <button
@@ -153,11 +172,15 @@ const ImageRenamerPage = () => {
         <div className="glass-card p-6">
           <div className="mb-4 flex items-center justify-between">
             <div>
-              <h3 className="text-lg font-semibold text-white">Preview & queue</h3>
-              <p className="text-sm text-slate-400">Original vs. generated filenames</p>
+              <h3 className="text-lg font-semibold text-white">
+                Preview & queue
+              </h3>
+              <p className="text-sm text-slate-400">
+                Original vs. generated filenames
+              </p>
             </div>
             <span className="rounded-full border border-white/10 px-3 py-1 text-xs text-slate-400">
-              {hasFiles ? `${renamedFiles.length} files` : 'Empty'}
+              {hasFiles ? `${renamedFiles.length} files` : "Empty"}
             </span>
           </div>
 
@@ -176,12 +199,18 @@ const ImageRenamerPage = () => {
                     />
                     <div>
                       <p className="text-sm text-slate-400">Original</p>
-                      <p className="font-medium text-white">{file.originalName}</p>
-                      <p className="mt-1 text-xs text-emerald-300">→ {file.newName}</p>
+                      <p className="font-medium text-white">
+                        {file.originalName}
+                      </p>
+                      <p className="mt-1 text-xs text-emerald-300">
+                        → {file.newName}
+                      </p>
                     </div>
                   </div>
                   <div className="flex flex-1 flex-col items-stretch justify-center gap-2 md:items-end">
-                    <PrimaryButton onClick={() => void downloadFile(file)}>Download</PrimaryButton>
+                    <PrimaryButton onClick={() => void downloadFile(file)}>
+                      Download
+                    </PrimaryButton>
                     <button
                       type="button"
                       onClick={() => removeFile(file.id)}
@@ -201,67 +230,75 @@ const ImageRenamerPage = () => {
         </div>
       </div>
     </section>
-  )
-}
+  );
+};
 
-export default ImageRenamerPage
+export default ImageRenamerPage;
 
-const extractFilesFromDataTransfer = async (dataTransfer: DataTransfer): Promise<File[]> => {
-  const items = Array.from(dataTransfer.items ?? [])
+const extractFilesFromDataTransfer = async (
+  dataTransfer: DataTransfer
+): Promise<File[]> => {
+  const items = Array.from(dataTransfer.items ?? []);
   const entryPromises = items
-    .map((item) => (item as DataTransferItem & { webkitGetAsEntry?: () => FileSystemEntry | null }).webkitGetAsEntry?.())
+    .map((item) =>
+      (
+        item as DataTransferItem & {
+          webkitGetAsEntry?: () => FileSystemEntry | null;
+        }
+      ).webkitGetAsEntry?.()
+    )
     .filter((entry): entry is FileSystemEntry => entry != null)
-    .map((entry) => readEntry(entry))
+    .map((entry) => readEntry(entry));
 
   if (!entryPromises.length) {
-    return Array.from(dataTransfer.files ?? [])
+    return Array.from(dataTransfer.files ?? []);
   }
 
-  const nested = await Promise.all(entryPromises)
-  return nested.flat()
-}
+  const nested = await Promise.all(entryPromises);
+  return nested.flat();
+};
 
 const readEntry = (entry: FileSystemEntry): Promise<File[]> => {
   if (entry.isFile) {
-    const fileEntry = entry as FileSystemFileEntry
+    const fileEntry = entry as FileSystemFileEntry;
     return new Promise((resolve, reject) => {
       fileEntry.file(
         (file) => resolve([file]),
-        (error) => reject(error),
-      )
-    })
+        (error) => reject(error)
+      );
+    });
   }
 
   if (entry.isDirectory) {
-    return readDirectory(entry as FileSystemDirectoryEntry)
+    return readDirectory(entry as FileSystemDirectoryEntry);
   }
 
-  return Promise.resolve([])
-}
+  return Promise.resolve([]);
+};
 
 const readDirectory = (entry: FileSystemDirectoryEntry): Promise<File[]> =>
   new Promise((resolve, reject) => {
-    const reader = entry.createReader()
-    const files: File[] = []
+    const reader = entry.createReader();
+    const files: File[] = [];
 
     const readEntries = () => {
       reader.readEntries(
         (entries) => {
           if (!entries.length) {
-            resolve(files)
-            return
+            resolve(files);
+            return;
           }
 
           Promise.all(entries.map(readEntry))
             .then((results) => {
-              results.forEach((batch) => files.push(...batch))
-              readEntries()
+              results.forEach((batch) => files.push(...batch));
+              readEntries();
             })
-            .catch((error) => reject(error))
+            .catch((error) => reject(error));
         },
-        (error) => reject(error),
-      )
-    }
+        (error) => reject(error)
+      );
+    };
 
-    readEntries()
-  })
+    readEntries();
+  });
