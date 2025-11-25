@@ -15,23 +15,23 @@ const navLinks = [
 
 const App = () => {
   return (
-    <div className="flex min-h-screen flex-col bg-slate-950 text-slate-100">
-      <header className="border-b border-white/10 bg-slate-900/80 px-6 py-4 backdrop-blur">
-        <div className="mx-auto flex w-full max-w-6xl flex-col gap-2 md:flex-row md:items-center md:justify-between">
-          <Link to="/" className="text-2xl font-semibold tracking-tight text-white">
+    <div className="app-shell flex min-h-screen flex-col text-slate-100">
+      <header className="border-b border-white/10 px-6 py-4 backdrop-blur">
+        <div className="mx-auto flex w-full max-w-6xl flex-col gap-3 md:flex-row md:items-center md:justify-between">
+          <Link to="/" className="text-2xl font-semibold tracking-tight text-white focus-ring">
             Useful Tools
           </Link>
-          <nav className="flex flex-wrap gap-3 text-sm text-slate-300">
+          <nav className="flex flex-wrap gap-2 text-sm text-slate-300">
             {navLinks.map(({ to, label }) => (
               <NavLink
                 key={to}
                 to={to}
                 className={({ isActive }) =>
                   [
-                    'rounded-full border px-4 py-1 transition',
+                    'focus-ring rounded-full border px-4 py-1 text-sm transition-all duration-200',
                     isActive
-                      ? 'border-emerald-400/60 bg-emerald-400/10 text-white'
-                      : 'border-white/10 bg-white/5 hover:border-white/30 hover:text-white',
+                      ? 'border-emerald-400/60 bg-emerald-400/15 text-white shadow-lg shadow-emerald-500/20'
+                      : 'border-white/10 bg-white/5 hover:border-white/30 hover:bg-white/10 hover:text-white',
                   ].join(' ')
                 }
               >
@@ -42,7 +42,7 @@ const App = () => {
         </div>
       </header>
 
-      <main className="mx-auto w-full max-w-5xl flex-1 px-6 py-10">
+      <main className="mx-auto w-full max-w-6xl flex-1 px-4 py-10 sm:px-6">
         <Routes>
           <Route path="/" element={<HomePage />} />
           <Route path="/background-removal" element={<BackgroundRemovalPage />} />
@@ -52,7 +52,7 @@ const App = () => {
         </Routes>
       </main>
 
-      <footer className="border-t border-white/10 bg-slate-900/70 px-6 py-4 text-center text-sm text-slate-400 backdrop-blur">
+      <footer className="border-t border-white/10 px-6 py-4 text-center text-sm text-slate-400 backdrop-blur">
         <div className="mx-auto w-full max-w-6xl">
           Built with React, Vite, and Tailwind — © {new Date().getFullYear()}
         </div>

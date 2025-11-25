@@ -6,6 +6,8 @@ type PatternState = {
   delimiter: string
 }
 
+export type OutputFormat = 'original' | 'image/png' | 'image/jpeg'
+
 type InternalFile = {
   id: string
   file: File
@@ -15,6 +17,7 @@ type InternalFile = {
 
 export type RenamedFile = InternalFile & {
   newName: string
+  targetFormat: OutputFormat
 }
 
 const defaultPattern: PatternState = {
@@ -22,6 +25,8 @@ const defaultPattern: PatternState = {
   startIndex: 1,
   delimiter: '-',
 }
+
+const defaultFormat: OutputFormat = 'original'
 
 const sanitizeBaseName = (value: string) => value.trim().replace(/\s+/g, '-')
 
@@ -33,10 +38,12 @@ const getExtension = (name: string) => {
 const useImageRenamer = () => {
   const [pattern, setPattern] = useState<PatternState>(defaultPattern)
   const [files, setFiles] = useState<InternalFile[]>([])
+  const [outputFormat, setOutputFormat] = useState<OutputFormat>(defaultFormat)
 
-  const addFiles = useCallback((list: FileList | File[]) => {
+  const addFiles = useCallback((list: FileList | File[] | null | undefined) => {
     if (!list) return
-    const accepted = Array.from(list).filter((file) => file.type.startsWith('image/'))
+    const array = Array.isArray(list) ? list : Array.from(list)
+    const accepted = array.filter((file) => file.type.startsWith('image/'))
     if (!accepted.length) return
 
     setFiles((prev) => [
@@ -62,16 +69,21 @@ const useImageRenamer = () => {
     const delimiter = pattern.delimiter ?? ''
     return files.map((entry, index) => {
       const numericIndex = pattern.startIndex + index
-      const paddedIndex = numericIndex.toString().padStart(2, '0')
-      const ext = getExtension(entry.originalName)
-      const newName = `${base}${delimiter ? delimiter : ''}${paddedIndex}${ext}`
+      const ext =
+        outputFormat === 'original'
+          ? getExtension(entry.originalName) || inferExtension(entry.file.type)
+          : outputFormat === 'image/png'
+            ? '.png'
+            : '.jpg'
+      const newName = `${base}${delimiter ? delimiter : ''}${numericIndex}${ext}`
 
       return {
         ...entry,
         newName,
+        targetFormat: outputFormat,
       }
     })
-  }, [files, pattern.baseName, pattern.delimiter, pattern.startIndex])
+  }, [files, outputFormat, pattern.baseName, pattern.delimiter, pattern.startIndex])
 
   const updatePattern = useCallback((key: keyof PatternState, value: string | number) => {
     setPattern((prev) => ({
@@ -80,17 +92,30 @@ const useImageRenamer = () => {
     }))
   }, [])
 
-  const downloadFile = useCallback((entry: RenamedFile) => {
+  const downloadFile = useCallback(async (entry: RenamedFile) => {
+    let url = entry.previewUrl
+    let revokeAfter = false
+
+    if (entry.targetFormat !== 'original') {
+      const blob = await convertFormat(entry.file, entry.targetFormat)
+      url = URL.createObjectURL(blob)
+      revokeAfter = true
+    }
+
     const link = document.createElement('a')
-    link.href = entry.previewUrl
+    link.href = url
     link.download = entry.newName
     link.click()
+
+    if (revokeAfter) {
+      setTimeout(() => URL.revokeObjectURL(url), 1500)
+    }
   }, [])
 
-  const downloadAll = useCallback(() => {
-    renamedFiles.forEach((entry) => {
-      downloadFile(entry)
-    })
+  const downloadAll = useCallback(async () => {
+    for (const entry of renamedFiles) {
+      await downloadFile(entry)
+    }
   }, [renamedFiles, downloadFile])
 
   const removeFile = useCallback((id: string) => {
@@ -117,9 +142,53 @@ const useImageRenamer = () => {
     updatePattern,
     downloadFile,
     downloadAll,
+    outputFormat,
+    setOutputFormat,
     clearFiles,
     removeFile,
   }
 }
+
+const inferExtension = (type: string) => {
+  if (type === 'image/png') return '.png'
+  if (type === 'image/jpeg') return '.jpg'
+  return '.png'
+}
+
+const convertFormat = async (file: File, format: Exclude<OutputFormat, 'original'>) => {
+  const dataUrl = URL.createObjectURL(file)
+  const image = await loadImage(dataUrl)
+  const canvas = document.createElement('canvas')
+  canvas.width = image.width
+  canvas.height = image.height
+  const ctx = canvas.getContext('2d')
+  if (!ctx) throw new Error('Canvas not supported')
+  ctx.drawImage(image, 0, 0)
+
+  const blob: Blob = await new Promise((resolve, reject) => {
+    canvas.toBlob(
+      (result) => {
+        if (!result) {
+          reject(new Error('Failed to convert image'))
+          return
+        }
+        resolve(result)
+      },
+      format,
+      format === 'image/jpeg' ? 0.92 : undefined,
+    )
+  })
+
+  URL.revokeObjectURL(dataUrl)
+  return blob
+}
+
+const loadImage = (src: string) =>
+  new Promise<HTMLImageElement>((resolve, reject) => {
+    const img = new Image()
+    img.onload = () => resolve(img)
+    img.onerror = (err) => reject(err)
+    img.src = src
+  })
 
 export default useImageRenamer

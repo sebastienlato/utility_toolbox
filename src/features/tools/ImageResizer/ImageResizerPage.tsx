@@ -122,7 +122,7 @@ const ImageResizerPage = () => {
 
   return (
     <section className="space-y-10">
-      <div className="rounded-3xl border border-white/10 bg-gradient-to-br from-slate-900/80 via-slate-900/60 to-slate-900/30 p-10 shadow-[0_15px_80px_rgba(2,6,23,0.85)] backdrop-blur">
+      <div className="glass-card p-10">
         <PageHeader
           eyebrow="Resize"
           title="Resize images directly in your browser"
@@ -133,7 +133,7 @@ const ImageResizerPage = () => {
       <div className="grid gap-8 lg:grid-cols-[1.05fr_0.95fr]">
         <div className="space-y-8">
           <div
-            className="flex flex-col items-center justify-center rounded-3xl border-2 border-dashed border-white/20 bg-white/5 p-10 text-center transition hover:border-emerald-400/60 hover:bg-white/10"
+            className="glass-card flex flex-col items-center justify-center border-2 border-dashed border-white/15 p-10 text-center transition hover:border-emerald-400/60 hover:bg-white/10"
             onDrop={handleDrop}
             onDragOver={handleDragOver}
             onClick={() => inputRef.current?.click()}
@@ -155,7 +155,7 @@ const ImageResizerPage = () => {
             </p>
           </div>
 
-          <div className="rounded-3xl border border-white/10 bg-white/5 p-8">
+          <div className="glass-card p-8">
             <h2 className="mb-6 text-lg font-semibold text-white">Resize options</h2>
             <div className="grid gap-6 md:grid-cols-2">
               <div>
@@ -227,7 +227,7 @@ const ImageResizerPage = () => {
           </div>
         </div>
 
-        <div className="rounded-3xl border border-white/10 bg-white/5 p-6">
+        <div className="glass-card p-6">
           <div className="mb-4 flex items-center justify-between">
             <div>
               <h3 className="text-lg font-semibold text-white">Preview</h3>

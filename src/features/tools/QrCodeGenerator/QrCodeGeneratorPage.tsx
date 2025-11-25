@@ -1,5 +1,5 @@
 import { useMemo, useRef, useState } from 'react'
-import QRCode from 'qrcode.react'
+import { QRCodeCanvas } from 'qrcode.react'
 import PageHeader from '../../../components/PageHeader'
 import PrimaryButton from '../../../components/PrimaryButton'
 
@@ -35,7 +35,7 @@ const QrCodeGeneratorPage = () => {
 
   return (
     <section className="space-y-10">
-      <div className="rounded-3xl border border-white/10 bg-gradient-to-br from-slate-900/80 via-slate-900/60 to-slate-900/30 p-10 shadow-[0_15px_80px_rgba(2,6,23,0.85)] backdrop-blur">
+      <div className="glass-card p-10">
         <PageHeader
           eyebrow="QR code"
           title="Generate scannable codes instantly"
@@ -44,7 +44,7 @@ const QrCodeGeneratorPage = () => {
       </div>
 
       <div className="grid gap-8 lg:grid-cols-[1.05fr_0.95fr]">
-        <div className="space-y-6 rounded-3xl border border-white/10 bg-white/5 p-8">
+        <div className="glass-card space-y-6 p-8">
           <div className="space-y-2">
             <label className="text-sm text-slate-300">
               Text or URL
@@ -113,17 +113,16 @@ const QrCodeGeneratorPage = () => {
           </div>
         </div>
 
-        <div className="flex h-full flex-col items-center justify-center rounded-3xl border border-white/10 bg-white/5 p-8">
+        <div className="glass-card flex h-full flex-col items-center justify-center p-8">
           {isValid ? (
             <div className="rounded-2xl border border-white/10 bg-slate-950/80 p-6">
-              <QRCode
+              <QRCodeCanvas
                 value={text.trim()}
                 size={size}
                 level={errorLevel}
                 includeMargin
                 bgColor="#020617"
                 fgColor="#ffffff"
-                renderAs="canvas"
                 ref={canvasRef}
               />
               <p className="mt-4 text-center text-sm text-slate-400">

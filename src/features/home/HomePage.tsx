@@ -5,22 +5,22 @@ import { tools } from '../tools/toolRegistry'
 const HomePage = () => {
   return (
     <section className="space-y-10">
-      <div className="rounded-3xl border border-white/10 bg-gradient-to-br from-slate-900/80 via-slate-900/60 to-slate-900/30 p-10 shadow-[0_15px_80px_rgba(2,6,23,0.85)] backdrop-blur">
+      <div className="glass-card p-10">
         <PageHeader
           eyebrow="Tool hub"
           title="Your go-to workspace for image utilities"
           description="Explore a curated set of utilities for creatives and marketers. Each tool launches in a dedicated workspace with focused controls."
         />
         <div className="mt-10 grid gap-6 text-sm text-slate-300 md:grid-cols-3">
-          <div className="rounded-2xl border border-white/10 bg-white/5 p-4">
+          <div className="glass-card p-4">
             <p className="text-lg font-medium text-white">Fast iteration</p>
             <p>Instant previews powered by Vite and Tailwind.</p>
           </div>
-          <div className="rounded-2xl border border-white/10 bg-white/5 p-4">
+          <div className="glass-card p-4">
             <p className="text-lg font-medium text-white">Modular tools</p>
             <p>Each feature lives in its own folder plus shared UI.</p>
           </div>
-          <div className="rounded-2xl border border-white/10 bg-white/5 p-4">
+          <div className="glass-card p-4">
             <p className="text-lg font-medium text-white">Future-ready</p>
             <p>Registry-driven navigation makes adding tools simple.</p>
           </div>
