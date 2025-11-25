@@ -1,0 +1,220 @@
+# Useful Tools — Architecture
+
+This document describes the structure of the **Useful Tools** app and how to extend it with new tools.
+
+---
+
+## Tech Stack
+
+- **React** (Vite-based SPA)
+- **Tailwind CSS** for styling
+- **React Router** for navigation
+- Optional:
+  - `qrcode.react` for QR code generation
+  - Canvas APIs for image resizing
+
+The app is a single-page application: the homepage lists tools, and each tool has its own route/page.
+
+---
+
+## High-level Structure
+
+Target structure (TypeScript version shown, use `.jsx` if project is JS):
+
+```txt
+src/
+  main.(tsx|jsx)
+  App.(tsx|jsx)
+
+  components/
+    layout/
+      AppLayout.(tsx|jsx)
+      Header.(tsx|jsx)
+      Footer.(tsx|jsx)
+    ui/
+      ToolCard.(tsx|jsx)
+      Button.(tsx|jsx)
+      Badge.(tsx|jsx)
+
+  features/
+    home/
+      HomePage.(tsx|jsx)
+
+    tools/
+      toolRegistry.(ts|js)       # central metadata for tools
+
+      BackgroundRemoval/
+        BackgroundRemovalPage.(tsx|jsx)
+
+      ImageRenamer/
+        ImageRenamerPage.(tsx|jsx)
+        useImageRenamer.(ts|js)
+
+      ImageResizer/
+        ImageResizerPage.(tsx|jsx)
+        imageResizeService.(ts|js)
+
+      QrCodeGenerator/
+        QrCodeGeneratorPage.(tsx|jsx)
+
+  services/
+    backgroundRemovalService.(ts|js)
+    imageResizeService.(ts|js)
+
+  styles/
+    (optional) helper files if needed, but Tailwind is primary
+```
+
+Routing is configured in `App.(tsx|jsx)` (or in a dedicated routes file) using `react-router-dom`.
+
+## Tool Registry
+
+The tool registry is a single source of truth for available tools.
+
+Example:
+
+```ts
+// src/features/tools/toolRegistry.ts
+export type ToolId =
+  | "background-removal"
+  | "image-renamer"
+  | "image-resizer"
+  | "qr-code-generator";
+
+export type ToolMeta = {
+  id: ToolId;
+  name: string;
+  slug: string; // route path
+  shortDescription: string;
+  category: string;
+  status?: "stable" | "beta" | "experimental";
+};
+
+export const tools: ToolMeta[] = [
+  {
+    id: "background-removal",
+    name: "Background Removal",
+    slug: "/background-removal",
+    shortDescription:
+      "Upload an image and preview a background-removed result.",
+    category: "Images",
+    status: "beta",
+  },
+  {
+    id: "image-renamer",
+    name: "Image Renamer",
+    slug: "/image-renamer",
+    shortDescription: "Batch rename images with patterns and counters.",
+    category: "Images",
+    status: "stable",
+  },
+  {
+    id: "image-resizer",
+    name: "Image Resizer",
+    slug: "/image-resizer",
+    shortDescription:
+      "Resize images client-side and download optimized versions.",
+    category: "Images",
+    status: "stable",
+  },
+  {
+    id: "qr-code-generator",
+    name: "QR Code Generator",
+    slug: "/qr-code-generator",
+    shortDescription: "Generate and download QR codes from any text or URL.",
+    category: "Text",
+    status: "stable",
+  },
+];
+```
+
+The Home page imports tools and renders them as cards.
+
+## Layout & UI Components
+
+### AppLayout
+
+Wraps the entire app with:
+
+- A header (site title, maybe a subtle tagline)
+- A `<main>` region where routed pages render
+- A footer with small text / links
+
+### Header
+
+- Displays **Useful Tools** as the brand/logo
+- May include a link back to the Home page
+
+### ToolCard
+
+- Reusable card for the Home page
+- Props: `name`, `description`, `badge`, `status`, `href`
+- Styled with Tailwind for a modern glassy look (backdrop blur, gradients)
+
+## How to Add a New Tool
+
+### Create the Feature Folder
+
+```txt
+src/features/tools/ImageCompressor/
+ImageCompressorPage.(tsx|jsx)
+```
+
+### Register the Route
+
+```tsx
+import { ImageCompressorPage } from "./features/tools/ImageCompressor/ImageCompressorPage";
+
+<Route path="/image-compressor" element={<ImageCompressorPage />} />;
+```
+
+## Add to the Tool Registry
+
+```ts
+tools.push({
+  id: "image-compressor",
+  name: "Image Compressor",
+  slug: "/image-compressor",
+  shortDescription: "Compress images to smaller file sizes.",
+  category: "Images",
+  status: "experimental",
+});
+```
+
+The Home page automatically shows it.
+
+### (Optional) Add Services
+
+```txt
+src/services/imageCompressorService.(ts|js)
+```
+
+or:
+
+```txt
+src/features/tools/ImageCompressor/useImageCompressor.(ts|js)
+```
+
+## Extra Dependencies
+
+Install only what the tool needs
+
+Keep dependencies minimal
+
+## Design & Theming
+
+Tailwind is the primary styling tool
+
+Define a consistent theme:
+
+- background / foreground / accents
+- card spacing + radii
+- typography scale
+
+Extract utility classes for:
+
+- card shells
+- primary/secondary buttons
+- input fields
+
+Ensures every tool feels consistent and cohesive.
