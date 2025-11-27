@@ -1,6 +1,7 @@
 import { Link, Route, Routes } from "react-router-dom";
 import HomePage from "./features/home/HomePage";
 import BackgroundRemovalPage from "./features/tools/BackgroundRemoval/BackgroundRemovalPage";
+import ColorPaletteExtractorPage from "./features/tools/ColorPaletteExtractor/ColorPaletteExtractorPage";
 import ImageCompressorPage from "./features/tools/ImageCompressor/ImageCompressorPage";
 import ImageFormatConverterPage from "./features/tools/ImageFormatConverter/ImageFormatConverterPage";
 import ImageRenamerPage from "./features/tools/ImageRenamer/ImageRenamerPage";
@@ -54,6 +55,10 @@ const App = () => {
           <Route
             path="/text-case-converter"
             element={<TextCaseConverterPage />}
+          />
+          <Route
+            path="/color-palette-extractor"
+            element={<ColorPaletteExtractorPage />}
           />
         </Routes>
       </main>

@@ -78,4 +78,13 @@ export const tools: ToolMeta[] = [
     category: "Text",
     status: "experimental",
   },
+  {
+    id: "color-palette-extractor",
+    name: "Color Palette Extractor",
+    shortDescription:
+      "Extract dominant colors from any image and copy their codes.",
+    slug: "/color-palette-extractor",
+    category: "Images",
+    status: "experimental",
+  },
 ];
