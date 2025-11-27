@@ -36,31 +36,34 @@
 
 ## Tool Catalog
 
-| Tool | Route | Status | Highlights |
-| --- | --- | --- | --- |
-| Background Removal | `/background-removal` | Beta | Drag-and-drop uploads with before/after preview, mock progress states, and transparent PNG exports. |
-| Image Renamer | `/image-renamer` | Stable | Batch rename files with custom patterns, delimiters, numbering, and optional extension changes. |
-| Image Resizer | `/image-resizer` | Stable | Canvas-based resizing queue with aspect locking, quality control, and per-file downloads. |
-| QR Code Generator | `/qr-code-generator` | Stable | Generate QR codes from URLs/text, tune error correction, and export PNGs. |
-| Image Compressor | `/image-compressor` | Experimental | Reduce file sizes client-side with adjustable quality targets. |
-| Image Format Converter | `/image-format-converter` | Experimental | Convert images between PNG, JPG, and WEBP on the fly. |
-| PDF Tools | `/pdf-tools` | Experimental | Reorder and merge PDF uploads entirely in the browser. |
-| Text Case Converter | `/text-case-converter` | Experimental | Quickly toggle sentences, camelCase, snake_case, and uppercase/lowercase variants. |
-| Color Palette Extractor | `/color-palette-extractor` | Experimental | Detect dominant colors in an image and copy hex values instantly. |
-| Favicon Generator | `/favicon-generator` | Experimental | Produce multi-size favicon sets plus PNG previews. |
-| Image Filters | `/image-filters` | Experimental | Apply blur, contrast, grayscale, and other filters with live previews. |
+| Tool                    | Route                      | Status       | Highlights                                                                                          |
+| ----------------------- | -------------------------- | ------------ | --------------------------------------------------------------------------------------------------- |
+| Background Removal      | `/background-removal`      | Beta         | Drag-and-drop uploads with before/after preview, mock progress states, and transparent PNG exports. |
+| Image Renamer           | `/image-renamer`           | Stable       | Batch rename files with custom patterns, delimiters, numbering, and optional extension changes.     |
+| Image Resizer           | `/image-resizer`           | Stable       | Canvas-based resizing queue with aspect locking, quality control, and per-file downloads.           |
+| QR Code Generator       | `/qr-code-generator`       | Stable       | Generate QR codes from URLs/text, tune error correction, and export PNGs.                           |
+| Image Compressor        | `/image-compressor`        | Experimental | Reduce file sizes client-side with adjustable quality targets.                                      |
+| Image Format Converter  | `/image-format-converter`  | Experimental | Convert images between PNG, JPG, and WEBP on the fly.                                               |
+| PDF Tools               | `/pdf-tools`               | Experimental | Reorder and merge PDF uploads entirely in the browser.                                              |
+| Text Case Converter     | `/text-case-converter`     | Experimental | Quickly toggle sentences, camelCase, snake_case, and uppercase/lowercase variants.                  |
+| Color Palette Extractor | `/color-palette-extractor` | Experimental | Detect dominant colors in an image and copy hex values instantly.                                   |
+| Favicon Generator       | `/favicon-generator`       | Experimental | Produce multi-size favicon sets plus PNG previews.                                                  |
+| Image Filters           | `/image-filters`           | Experimental | Apply blur, contrast, grayscale, and other filters with live previews.                              |
 
 ---
 
 ## Why It Works
 
 ### 1. Unified Workspace
+
 Single shell (`src/App.tsx`) wires every route with React Router and keeps header/footer branding consistent. Shared layout primitives ensure each feature inherits the same keyboard and color-accessible interactions.
 
 ### 2. Opinionated Components
+
 Buttons, drop zones, and cards live in `src/components`, giving tools a cohesive look while letting feature folders focus solely on domain logic.
 
 ### 3. Service-First Logic
+
 Canvas operations, mock APIs, and helpers stay in `src/services`, making it trivial to reuse logic between tools or swap in real endpoints later.
 
 ---
@@ -104,12 +107,12 @@ Visit `http://localhost:5173` for local development with Hot Module Replacement.
 
 ## Available Scripts
 
-| Command | Description |
-| --- | --- |
-| `npm run dev` | Launch Vite with HMR. |
-| `npm run build` | Type-check via `tsc -b` and emit the optimized production bundle. |
-| `npm run preview` | Serve the built assets locally for final smoke tests. |
-| `npm run lint` | Run the flat ESLint config across all `.ts`/`.tsx` files. |
+| Command           | Description                                                       |
+| ----------------- | ----------------------------------------------------------------- |
+| `npm run dev`     | Launch Vite with HMR.                                             |
+| `npm run build`   | Type-check via `tsc -b` and emit the optimized production bundle. |
+| `npm run preview` | Serve the built assets locally for final smoke tests.             |
+| `npm run lint`    | Run the flat ESLint config across all `.ts`/`.tsx` files.         |
 
 ---
 
