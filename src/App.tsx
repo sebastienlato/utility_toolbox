@@ -7,6 +7,7 @@ import ImageRenamerPage from "./features/tools/ImageRenamer/ImageRenamerPage";
 import ImageResizerPage from "./features/tools/ImageResizer/ImageResizerPage";
 import PdfToolsPage from "./features/tools/PdfTools/PdfToolsPage";
 import QrCodeGeneratorPage from "./features/tools/QrCodeGenerator/QrCodeGeneratorPage";
+import TextCaseConverterPage from "./features/tools/TextCaseConverter/TextCaseConverterPage";
 
 const App = () => {
   return (
@@ -50,6 +51,10 @@ const App = () => {
             element={<ImageFormatConverterPage />}
           />
           <Route path="/pdf-tools" element={<PdfToolsPage />} />
+          <Route
+            path="/text-case-converter"
+            element={<TextCaseConverterPage />}
+          />
         </Routes>
       </main>
 

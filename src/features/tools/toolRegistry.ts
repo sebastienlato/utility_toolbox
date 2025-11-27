@@ -70,4 +70,12 @@ export const tools: ToolMeta[] = [
     category: "Documents",
     status: "experimental",
   },
+  {
+    id: "text-case-converter",
+    name: "Text Case Converter",
+    shortDescription: "Quickly convert text between cases and formats.",
+    slug: "/text-case-converter",
+    category: "Text",
+    status: "experimental",
+  },
 ];
