@@ -1,6 +1,6 @@
-# Useful Tools — Architecture
+# Utility Toolbox — Architecture
 
-This document defines the structure, conventions, and patterns used across the **Useful Tools** project.
+This document defines the structure, conventions, and patterns used across the **Utility Toolbox** project.
 
 It covers:
 

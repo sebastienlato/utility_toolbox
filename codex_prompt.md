@@ -1,6 +1,6 @@
-# Codex Prompt — Useful Tools
+# Codex Prompt — Utility Toolbox
 
-You are Codex working inside an existing **React + Vite + Tailwind + TypeScript** project named **Useful Tools**.
+You are Codex working inside an existing **React + Vite + Tailwind + TypeScript** project named **Utility Toolbox**.
 
 The user controls the repo, Git history, and `plan.md`.  
 Your job is to implement features **phase-by-phase**, in small, reviewable chunks.

@@ -65,9 +65,12 @@ const ColorPaletteExtractorPage = () => {
     [handleFiles]
   );
 
-  const handleDragOver = useCallback((event: React.DragEvent<HTMLDivElement>) => {
-    event.preventDefault();
-  }, []);
+  const handleDragOver = useCallback(
+    (event: React.DragEvent<HTMLDivElement>) => {
+      event.preventDefault();
+    },
+    []
+  );
 
   return (
     <section className="space-y-10">
@@ -146,9 +149,7 @@ const ColorPaletteExtractorPage = () => {
             </PrimaryButton>
           </div>
 
-          {error ? (
-            <p className="mt-4 text-sm text-red-400">{error}</p>
-          ) : null}
+          {error ? <p className="mt-4 text-sm text-red-400">{error}</p> : null}
 
           {status === "loading" ? (
             <div className="mt-6 grid gap-4 md:grid-cols-2">

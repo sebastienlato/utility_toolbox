@@ -22,16 +22,12 @@ const ToolCard = ({
   } as const;
 
   const badgeClasses =
-    statusStyles[
-      status as keyof typeof statusStyles
-    ] ?? statusStyles.stable;
+    statusStyles[status as keyof typeof statusStyles] ?? statusStyles.stable;
 
   return (
     <article className="card flex h-full flex-col justify-between p-6 transition hover:-translate-y-1 hover:border-neutral-700 hover:bg-neutral-950">
       <div className="space-y-3">
-        <p className="label text-[0.65rem] text-neutral-500">
-          {category}
-        </p>
+        <p className="label text-[0.65rem] text-neutral-500">{category}</p>
         <div className="flex items-start justify-between gap-3">
           <h2 className="text-2xl font-semibold text-zinc-100">{name}</h2>
           <span

@@ -21,17 +21,14 @@ const App = () => {
             to="/"
             className="group ml-10 flex items-center gap-2 focus-ring"
           >
-            <div className="flex h-8 w-8 items-center justify-center rounded-full border border-neutral-800 bg-neutral-950 text-xs font-semibold text-neutral-200 transition group-hover:border-neutral-600 group-hover:text-white">
-              UT
-            </div>
-            <span className="sr-only">Go to Useful Tools home</span>
+            <span className="sr-only">Go to Utility Toolbox home</span>
           </Link>
 
           <Link
             to="/"
-            className="absolute left-1/2 -translate-x-1/2 text-3xl font-semibold tracking-wide text-neutral-200 transition hover:text-white focus-ring"
+            className="absolute left-1/2 -translate-x-1/2 text-5xl font-bold tracking-wide text-neutral-200 transition hover:text-white focus-ring"
           >
-            Useful Tools
+            Utility Toolbox
           </Link>
 
           <div className="w-8" aria-hidden />
@@ -69,7 +66,7 @@ const App = () => {
 
       <footer className="border-t border-neutral-900/70 bg-black/70 px-6 py-4 text-center text-sm text-zinc-500 backdrop-blur-sm">
         <div className="mx-auto w-full max-w-6xl">
-          Built with React, Vite, and Tailwind — LatoDev ©{" "}
+          Utility Toolbox — built with React, Vite, and Tailwind by LatoDev ©{" "}
           {new Date().getFullYear()}
         </div>
       </footer>
