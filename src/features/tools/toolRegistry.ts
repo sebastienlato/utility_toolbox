@@ -54,4 +54,12 @@ export const tools: ToolMeta[] = [
     category: "Images",
     status: "experimental",
   },
+  {
+    id: "image-format-converter",
+    name: "Image Format Converter",
+    shortDescription: "Convert images between PNG, JPEG, and WEBP.",
+    slug: "/image-format-converter",
+    category: "Images",
+    status: "experimental",
+  },
 ];

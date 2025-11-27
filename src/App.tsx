@@ -2,6 +2,7 @@ import { Link, Route, Routes } from "react-router-dom";
 import HomePage from "./features/home/HomePage";
 import BackgroundRemovalPage from "./features/tools/BackgroundRemoval/BackgroundRemovalPage";
 import ImageCompressorPage from "./features/tools/ImageCompressor/ImageCompressorPage";
+import ImageFormatConverterPage from "./features/tools/ImageFormatConverter/ImageFormatConverterPage";
 import ImageRenamerPage from "./features/tools/ImageRenamer/ImageRenamerPage";
 import ImageResizerPage from "./features/tools/ImageResizer/ImageResizerPage";
 import QrCodeGeneratorPage from "./features/tools/QrCodeGenerator/QrCodeGeneratorPage";
@@ -43,6 +44,10 @@ const App = () => {
           <Route path="/image-resizer" element={<ImageResizerPage />} />
           <Route path="/qr-code-generator" element={<QrCodeGeneratorPage />} />
           <Route path="/image-compressor" element={<ImageCompressorPage />} />
+          <Route
+            path="/image-format-converter"
+            element={<ImageFormatConverterPage />}
+          />
         </Routes>
       </main>
 
