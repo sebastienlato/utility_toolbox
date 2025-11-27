@@ -62,4 +62,12 @@ export const tools: ToolMeta[] = [
     category: "Images",
     status: "experimental",
   },
+  {
+    id: "pdf-tools",
+    name: "PDF Tools",
+    shortDescription: "Merge PDFs client-side and export a combined file.",
+    slug: "/pdf-tools",
+    category: "Documents",
+    status: "experimental",
+  },
 ];

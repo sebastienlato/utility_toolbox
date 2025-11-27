@@ -5,6 +5,7 @@ import ImageCompressorPage from "./features/tools/ImageCompressor/ImageCompresso
 import ImageFormatConverterPage from "./features/tools/ImageFormatConverter/ImageFormatConverterPage";
 import ImageRenamerPage from "./features/tools/ImageRenamer/ImageRenamerPage";
 import ImageResizerPage from "./features/tools/ImageResizer/ImageResizerPage";
+import PdfToolsPage from "./features/tools/PdfTools/PdfToolsPage";
 import QrCodeGeneratorPage from "./features/tools/QrCodeGenerator/QrCodeGeneratorPage";
 
 const App = () => {
@@ -48,6 +49,7 @@ const App = () => {
             path="/image-format-converter"
             element={<ImageFormatConverterPage />}
           />
+          <Route path="/pdf-tools" element={<PdfToolsPage />} />
         </Routes>
       </main>
 
