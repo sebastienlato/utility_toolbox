@@ -5,6 +5,7 @@ import {
   useRef,
   useState,
 } from "react";
+import BackToTools from "../../../components/BackToTools";
 import PageHeader from "../../../components/PageHeader";
 import PrimaryButton from "../../../components/PrimaryButton";
 import {
@@ -216,6 +217,7 @@ const ImageFormatConverterPage = () => {
   return (
     <section className="space-y-10">
       <div className="card border-neutral-900 p-10">
+        <BackToTools />
         <PageHeader
           eyebrow="Formats"
           title="Convert images between PNG, JPEG, and WEBP"

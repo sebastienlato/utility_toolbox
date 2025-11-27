@@ -1,4 +1,5 @@
 import { useCallback, useRef, useState } from "react";
+import BackToTools from "../../../components/BackToTools";
 import PageHeader from "../../../components/PageHeader";
 import PrimaryButton from "../../../components/PrimaryButton";
 import {
@@ -71,6 +72,7 @@ const ColorPaletteExtractorPage = () => {
   return (
     <section className="space-y-10">
       <div className="card border-neutral-900 p-10">
+        <BackToTools />
         <PageHeader
           eyebrow="Color"
           title="Extract palettes from any image"

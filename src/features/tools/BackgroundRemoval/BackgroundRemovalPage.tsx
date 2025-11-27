@@ -1,6 +1,7 @@
 import { useCallback, useMemo, useRef, useState } from "react";
-import PrimaryButton from "../../../components/PrimaryButton";
+import BackToTools from "../../../components/BackToTools";
 import PageHeader from "../../../components/PageHeader";
+import PrimaryButton from "../../../components/PrimaryButton";
 import { backgroundRemovalService } from "../../../services/backgroundRemovalService";
 
 type Status = "idle" | "processing" | "ready" | "error";
@@ -59,6 +60,7 @@ const BackgroundRemovalPage = () => {
   return (
     <section className="space-y-10">
       <div className="card border-neutral-900 p-10">
+        <BackToTools />
         <PageHeader
           eyebrow="Images"
           title="Background Removal"

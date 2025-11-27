@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { QRCodeCanvas, QRCodeSVG } from "qrcode.react";
+import BackToTools from "../../../components/BackToTools";
 import PageHeader from "../../../components/PageHeader";
 import PrimaryButton from "../../../components/PrimaryButton";
 
@@ -287,6 +288,7 @@ const QrCodeGeneratorPage = () => {
   return (
     <section className="space-y-10">
       <div className="card border-neutral-900 p-10">
+        <BackToTools />
         <PageHeader
           eyebrow="QR code"
           title="Generate scannable codes instantly"
