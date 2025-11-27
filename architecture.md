@@ -1,36 +1,53 @@
 # Useful Tools — Architecture
 
-This document describes the structure of the **Useful Tools** app and how to extend it with new tools.
+This document defines the structure, conventions, and patterns used across the **Useful Tools** project.
+
+It covers:
+
+- Project folder conventions
+- Tool architecture
+- Shared components
+- Services and utilities
+- How to add new tools
 
 ---
 
-## Tech Stack
+# 1. Tech Stack
 
-- **React** (Vite-based SPA)
-- **Tailwind CSS** for styling
-- **React Router** for navigation
-- Optional:
-  - `qrcode.react` for QR code generation
-  - Canvas APIs for image resizing
-
-The app is a single-page application: the homepage lists tools, and each tool has its own route/page.
+- **React** (Vite)
+- **TypeScript**
+- **Tailwind CSS**
+- **React Router**
+- **HTML Canvas APIs** (image processing)
+- Optional libraries:
+  - `qrcode.react`
+  - Compression utilities
+  - Color extraction utilities
 
 ---
 
-## High-level Structure
+# 2. Project Structure
 
-Current structure:
+Target structure:
 
-```txt
+```
 src/
   main.tsx
   App.tsx
-  index.css             # imports Tailwind + CSS tokens
+  index.css
 
   components/
     PageHeader.tsx
     PrimaryButton.tsx
     ToolCard.tsx
+    InputField.tsx
+    SelectField.tsx
+    DropZone.tsx
+
+  layout/
+    AppLayout.tsx
+    Header.tsx
+    Footer.tsx
 
   features/
     home/
@@ -48,161 +65,220 @@ src/
 
       ImageResizer/
         ImageResizerPage.tsx
+        imageResizeService.ts
 
       QrCodeGenerator/
         QrCodeGeneratorPage.tsx
 
-  services/
-    backgroundRemovalService.ts
-    imageResizeService.ts
+      FileCompressor/
+        FileCompressorPage.tsx
+        fileCompressorService.ts
+
+      ColorPaletteExtractor/
+        ColorPaletteExtractorPage.tsx
+        colorPaletteService.ts
+
+      ImageWatermarker/
+        ImageWatermarkerPage.tsx
+        watermarkService.ts
+
+      TextCaseConverter/
+        TextCaseConverterPage.tsx
+
+      UUIDGenerator/
+        UUIDGeneratorPage.tsx
+
+      PasswordGenerator/
+        PasswordGeneratorPage.tsx
+
+      JsonFormatter/
+        JsonFormatterPage.tsx
+
+      SvgOptimizer/
+        SvgOptimizerPage.tsx
+        svgOptimizerService.ts
 ```
 
-Routing is configured in `App.(tsx|jsx)` (or in a dedicated routes file) using `react-router-dom`.
+---
 
-## Tool Registry
+# 3. Tool Registry
 
-The tool registry is a single source of truth for available tools.
+All tools must be declared in:
 
-Example:
+`src/features/tools/toolRegistry.ts`
+
+Each entry:
 
 ```ts
-// src/features/tools/toolRegistry.ts
-export type ToolId =
-  | "background-removal"
-  | "image-renamer"
-  | "image-resizer"
-  | "qr-code-generator";
-
-export type ToolMeta = {
-  id: ToolId;
-  name: string;
-  slug: string; // route path
-  shortDescription: string;
-  category: string;
-  status?: "stable" | "beta" | "experimental";
-};
-
-export const tools: ToolMeta[] = [
-  {
-    id: "background-removal",
-    name: "Background Removal",
-    slug: "/background-removal",
-    shortDescription:
-      "Upload an image and preview a background-removed result.",
-    category: "Images",
-    status: "beta",
-  },
-  {
-    id: "image-renamer",
-    name: "Image Renamer",
-    slug: "/image-renamer",
-    shortDescription: "Batch rename images with patterns and counters.",
-    category: "Images",
-    status: "stable",
-  },
-  {
-    id: "image-resizer",
-    name: "Image Resizer",
-    slug: "/image-resizer",
-    shortDescription:
-      "Resize images client-side and download optimized versions.",
-    category: "Images",
-    status: "stable",
-  },
-  {
-    id: "qr-code-generator",
-    name: "QR Code Generator",
-    slug: "/qr-code-generator",
-    shortDescription: "Generate and download QR codes from any text or URL.",
-    category: "Text",
-    status: "stable",
-  },
-];
+{
+  id: "image-resizer",
+  name: "Image Resizer",
+  slug: "/image-resizer",
+  shortDescription: "Resize images on the client.",
+  category: "Images",
+  status: "stable"
+}
 ```
 
-The Home page imports tools and renders them as cards.
+This registry fuels:
 
-## Layout & UI Components
+- Home page card list
+- Future sidebar navigation (if added)
+- CLI-based automation
 
-### AppLayout
+---
 
-Wraps the entire app with:
+# 4. Tool Page Conventions
 
-- A header (site title, maybe a subtle tagline)
-- A `<main>` region where routed pages render
-- A footer with small text / links
+Every tool follows:
 
-### Header
+```
+ToolName/
+  ToolNamePage.tsx
+  optionalHook.ts
+  optionalService.ts
+```
 
-- Displays **Useful Tools** as the brand/logo
-- May include a link back to the Home page
+Each Page must include:
 
-### ToolCard
+- `<PageHeader />`
+- A main panel using the **glass-card** style
+- Inputs on the left (mobile: top)
+- Preview / output on the right (mobile: bottom)
+- Clear empty / error states
+- Copy / download / export buttons
 
-- Reusable card for the Home page
-- Props: `name`, `description`, `badge`, `status`, `href`
-- Styled with Tailwind for a modern glassy look (backdrop blur, gradients)
+---
 
-## Adding a New Tool
+# 5. Shared UI Components
 
-1. **Create a feature folder**
+### `PageHeader`
 
-   ```
-   src/features/tools/ImageCompressor/
-     ImageCompressorPage.tsx
-     useImageCompressor.ts (optional)
-   ```
+- Tool title & description banner
 
-2. **Add the route**
+### `PrimaryButton`
 
-   ```tsx
-   import ImageCompressorPage from './features/tools/ImageCompressor/ImageCompressorPage'
+- Standard CTA button (blue/emerald by theme)
 
-   <Route path="/image-compressor" element={<ImageCompressorPage />} />
-   ```
+### `ToolCard`
 
-3. **Extend the registry (`src/features/tools/toolRegistry.ts`)**
+- Display tool metadata on the Home page
 
-   ```ts
-   tools.push({
-     id: 'image-compressor',
-     name: 'Image Compressor',
-     description: 'Reduce file sizes while keeping quality high.',
-     path: '/image-compressor',
-     category: 'Images',
-     status: 'experimental',
-   })
-   ```
+### `DropZone`
 
-   The Home page imports `tools` and will automatically render a card with the metadata.
+- Drag & drop + click-to-upload panel
+- Used across:
+  - Background removal
+  - Resizer
+  - Renamer
+  - Watermarker
+  - Palette extractor
 
-4. **Wire services if needed**
+---
 
-   - Add to `src/services/` (e.g., `imageCompressorService.ts`) or co-locate hooks in the feature folder.
-   - Keep async logic inside services/hooks so pages stay declarative.
+# 6. Services
 
-## TODOs / Future Tools
+Services are always:
 
-- TODO: Image Compressor (optimize size without resizes).
-- TODO: Advanced Text utilities (slug generator, case converter).
-- TODO: Batch watermarking tool.
+- Framework-free (no React inside)
+- Pure async logic
+- Reusable across tools if needed
 
-Keep dependencies minimal
+Examples:
 
-## Design & Theming
+- `backgroundRemovalService.ts`
+- `imageResizeService.ts`
+- `fileCompressorService.ts`
+- `watermarkService.ts`
+- `colorPaletteService.ts`
 
-Tailwind is the primary styling tool
+Each service should:
 
-Define a consistent theme:
+- Accept input(s)
+- Return a structured result object
+- Handle errors gracefully
+- Export clear & typed functions
 
-- background / foreground / accents
-- card spacing + radii
-- typography scale
+---
 
-Extract utility classes for:
+# 7. Adding a New Tool (Step-by-Step)
 
-- card shells
-- primary/secondary buttons
-- input fields
+### 1. Make a new folder
 
-Ensures every tool feels consistent and cohesive.
+```
+src/features/tools/MyNewTool/
+  MyNewToolPage.tsx
+```
+
+### 2. Add a route entry in App.tsx
+
+```
+<Route path="/my-new-tool" element={<MyNewToolPage />} />
+```
+
+### 3. Add a registry entry
+
+In `toolRegistry.ts`:
+
+```ts
+tools.push({
+  id: "my-new-tool",
+  name: "My New Tool",
+  slug: "/my-new-tool",
+  shortDescription: "Describe what it does.",
+  category: "Utilities",
+  status: "beta",
+});
+```
+
+### 4. (Optional) Add a service file
+
+If tool requires computation:
+
+```
+src/features/tools/MyNewTool/myNewToolService.ts
+```
+
+### 5. (Optional) Add hook
+
+If tool requires complex state:
+
+```
+useMyNewTool.ts
+```
+
+---
+
+# 8. Design System Guidelines
+
+### Theme
+
+- Monochrome dark (shadcn-like)
+- subtle gradients
+- glass panels (backdrop-blur + border-white/10)
+
+### Responsive Behavior
+
+- 1 column on mobile
+- 2–3 columns on desktop
+- Flexible card grids
+
+### Interaction Rules
+
+- Hover lift on cards
+- Clear focus rings
+- Smooth transitions
+- Disabled state visuals
+
+---
+
+# 9. TODO: Future Tools
+
+- Image Compressor (advanced)
+- Video Tools
+- Markdown Tools
+- AI-powered Text Tools
+
+---
+
+# End of Architecture

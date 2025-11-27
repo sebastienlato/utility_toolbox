@@ -52,8 +52,8 @@ const QrCodeGeneratorPage = () => {
   const [quietZone, setQuietZone] = useState(24);
   const [errorLevel, setErrorLevel] = useState<ErrorLevel>("M");
 
-  const [fgColor, setFgColor] = useState("#0f172a");
-  const [bgColor, setBgColor] = useState("#f8fafc");
+  const [fgColor, setFgColor] = useState("#f4f4f5");
+  const [bgColor, setBgColor] = useState("#050505");
   const [transparentBg, setTransparentBg] = useState(false);
 
   const [logoFile, setLogoFile] = useState<File | null>(null);
@@ -286,7 +286,7 @@ const QrCodeGeneratorPage = () => {
 
   return (
     <section className="space-y-10">
-      <div className="glass-card p-10">
+      <div className="card border-neutral-900 p-10">
         <PageHeader
           eyebrow="QR code"
           title="Generate scannable codes instantly"
@@ -295,9 +295,9 @@ const QrCodeGeneratorPage = () => {
       </div>
 
       <div className="grid gap-8 lg:grid-cols-[1.05fr_0.95fr]">
-        <div className="glass-card space-y-6 p-8">
+        <div className="card space-y-6 border-neutral-900 p-8">
           <div className="space-y-3">
-            <p className="text-sm font-semibold text-white">Content type</p>
+            <p className="text-sm font-semibold text-zinc-100">Content type</p>
             <div className="flex flex-wrap gap-2">
               {contentTypes.map(({ label, value }) => (
                 <button
@@ -307,8 +307,8 @@ const QrCodeGeneratorPage = () => {
                   className={[
                     "rounded-full border px-4 py-1 text-sm transition",
                     contentType === value
-                      ? "border-emerald-400/60 bg-emerald-400/10 text-white"
-                      : "border-white/10 bg-white/5 text-slate-300 hover:border-white/30 hover:text-white",
+                      ? "border-neutral-600 bg-neutral-900 text-white"
+                      : "border-neutral-900 text-zinc-500 hover:border-neutral-700 hover:text-white",
                   ].join(" ")}
                 >
                   {label}
@@ -318,33 +318,35 @@ const QrCodeGeneratorPage = () => {
           </div>
 
           <div className="space-y-2">
-            <label className="text-sm text-slate-300">
-              {contentType === "text"
-                ? "Text content"
-                : contentType === "email"
-                ? "Email address"
-                : "URL"}
+            <label className="space-y-2">
+              <span className="label text-[0.6rem]">
+                {contentType === "text"
+                  ? "Text content"
+                  : contentType === "email"
+                  ? "Email address"
+                  : "URL"}
+              </span>
               {contentType === "text" ? (
                 <textarea
                   value={currentInputValue}
                   onChange={(event) => handleInputChange(event.target.value)}
                   placeholder={placeholder}
                   rows={4}
-                  className="mt-2 w-full rounded-2xl border border-white/10 bg-slate-900/60 px-4 py-3 text-sm text-white placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-emerald-400/70"
+                  className="input min-h-[160px] resize-none"
                 />
               ) : (
                 <input
                   value={currentInputValue}
                   onChange={(event) => handleInputChange(event.target.value)}
                   placeholder={placeholder}
-                  className="mt-2 w-full rounded-2xl border border-white/10 bg-slate-900/60 px-4 py-3 text-sm text-white placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-emerald-400/70"
+                  className="input"
                 />
               )}
             </label>
             {validationMessage ? (
               <p className="text-xs text-amber-300">{validationMessage}</p>
             ) : (
-              <p className="text-xs text-slate-400">
+              <p className="text-xs text-zinc-500">
                 {contentType === "url"
                   ? "Tip: protocols like https:// are added if missing."
                   : contentType === "email"
@@ -354,10 +356,10 @@ const QrCodeGeneratorPage = () => {
             )}
           </div>
 
-          <div className="space-y-5 rounded-2xl border border-white/10 bg-white/5 p-4">
-            <div className="flex items-center justify-between text-sm text-slate-300">
+          <div className="space-y-5 rounded-2xl border border-neutral-900 bg-neutral-950/40 p-4">
+            <div className="flex flex-wrap items-center justify-between gap-4 text-sm text-zinc-400">
               <span>Export width: {exportSize}px</span>
-              <span className="text-xs text-slate-400">
+              <span className="text-xs text-zinc-500">
                 QR modules: {innerExportSize}px
               </span>
               <div className="flex flex-wrap gap-2">
@@ -367,10 +369,10 @@ const QrCodeGeneratorPage = () => {
                     type="button"
                     onClick={() => setSize(preset)}
                     className={[
-                      "rounded-full border px-2 py-0.5 text-xs",
+                      "rounded-full border px-2 py-0.5 text-xs transition",
                       size === preset
-                        ? "border-emerald-400/60 bg-emerald-400/10 text-white"
-                        : "border-white/10 text-slate-300 hover:border-white/30 hover:text-white",
+                        ? "border-neutral-600 bg-neutral-900 text-white"
+                        : "border-neutral-900 text-zinc-500 hover:border-neutral-700 hover:text-white",
                     ].join(" ")}
                   >
                     {preset}
@@ -385,9 +387,9 @@ const QrCodeGeneratorPage = () => {
               step={16}
               value={size}
               onChange={(event) => setSize(Number(event.target.value))}
-              className="w-full accent-emerald-400"
+              className="w-full accent-zinc-200"
             />
-            <div className="mt-4 text-sm text-slate-300">
+            <div className="mt-4 text-sm text-zinc-400">
               <div className="mb-2 flex items-center justify-between">
                 <span>Quiet zone: {quietZone}px</span>
               </div>
@@ -398,14 +400,14 @@ const QrCodeGeneratorPage = () => {
                 step={2}
                 value={quietZone}
                 onChange={(event) => setQuietZone(Number(event.target.value))}
-                className="w-full accent-emerald-400"
+                className="w-full accent-zinc-200"
               />
             </div>
           </div>
 
-          <div className="space-y-4 rounded-2xl border border-white/10 bg-white/5 p-4">
+          <div className="space-y-4 rounded-2xl border border-neutral-900 bg-neutral-950/40 p-4">
             <div>
-              <p className="mb-2 text-sm font-semibold text-white">
+              <p className="mb-2 text-sm font-semibold text-zinc-100">
                 Error correction
               </p>
               <div className="grid grid-cols-2 gap-2 sm:flex sm:flex-wrap">
@@ -417,8 +419,8 @@ const QrCodeGeneratorPage = () => {
                     className={[
                       "rounded-full border px-4 py-1 text-sm transition",
                       errorLevel === level.value
-                        ? "border-emerald-400/60 bg-emerald-400/10 text-white"
-                        : "border-white/10 bg-white/5 text-slate-300 hover:border-white/30 hover:text-white",
+                        ? "border-neutral-600 bg-neutral-900 text-white"
+                        : "border-neutral-900 text-zinc-500 hover:border-neutral-700 hover:text-white",
                     ].join(" ")}
                   >
                     {level.label}
@@ -429,42 +431,42 @@ const QrCodeGeneratorPage = () => {
 
             <div className="grid gap-4 md:grid-cols-2">
               <div className="space-y-2">
-                <label className="text-sm text-slate-300">
-                  Foreground color
-                  <div className="mt-1 flex items-center gap-3 rounded-2xl border border-white/10 bg-slate-900/60 px-3 py-2">
+                <label className="space-y-2">
+                  <span className="label text-[0.6rem]">Foreground color</span>
+                  <div className="flex items-center gap-3 rounded-2xl border border-neutral-900 bg-neutral-950/40 px-3 py-2">
                     <input
                       type="color"
                       value={fgColor}
                       onChange={(event) => setFgColor(event.target.value)}
-                      className="h-8 w-8 cursor-pointer rounded-full border border-white/10 bg-transparent"
+                      className="h-8 w-8 cursor-pointer rounded-full border border-neutral-800 bg-transparent"
                     />
                     <input
                       type="text"
                       value={fgColor}
                       onChange={(event) => setFgColor(event.target.value)}
-                      className="flex-1 bg-transparent text-sm text-white outline-none"
+                      className="flex-1 bg-transparent text-sm text-zinc-100 outline-none"
                     />
                   </div>
                 </label>
               </div>
               <div className="space-y-2">
-                <label className="text-sm text-slate-300">
-                  Background color
-                  <div className="mt-1 flex flex-col gap-2 rounded-2xl border border-white/10 bg-slate-900/60 px-3 py-2">
+                <label className="space-y-2">
+                  <span className="label text-[0.6rem]">Background color</span>
+                  <div className="flex flex-col gap-2 rounded-2xl border border-neutral-900 bg-neutral-950/40 px-3 py-2">
                     <div className="flex items-center gap-3">
                       <input
                         type="color"
                         value={bgColor}
                         disabled={transparentBg}
                         onChange={(event) => setBgColor(event.target.value)}
-                        className="h-8 w-8 cursor-pointer rounded-full border border-white/10 bg-transparent disabled:cursor-not-allowed disabled:opacity-40"
+                        className="h-8 w-8 cursor-pointer rounded-full border border-neutral-800 bg-transparent disabled:cursor-not-allowed disabled:opacity-40"
                       />
                       <input
                         type="text"
                         value={bgColor}
                         disabled={transparentBg}
                         onChange={(event) => setBgColor(event.target.value)}
-                        className="flex-1 bg-transparent text-sm text-white outline-none disabled:cursor-not-allowed disabled:opacity-40"
+                        className="flex-1 bg-transparent text-sm text-zinc-100 outline-none disabled:cursor-not-allowed disabled:opacity-40"
                       />
                     </div>
                     <button
@@ -473,8 +475,8 @@ const QrCodeGeneratorPage = () => {
                       className={[
                         "rounded-full border px-3 py-1 text-xs transition",
                         transparentBg
-                          ? "border-emerald-400/60 bg-emerald-400/10 text-white"
-                          : "border-white/15 text-slate-300 hover:border-white/30 hover:text-white",
+                          ? "border-neutral-600 bg-neutral-900 text-white"
+                          : "border-neutral-900 text-zinc-500 hover:border-neutral-700 hover:text-white",
                       ].join(" ")}
                     >
                       {transparentBg
@@ -487,19 +489,21 @@ const QrCodeGeneratorPage = () => {
             </div>
           </div>
 
-          <div className="space-y-4 rounded-2xl border border-white/10 bg-white/5 p-4">
+          <div className="space-y-4 rounded-2xl border border-neutral-900 bg-neutral-950/40 p-4">
             <div className="flex items-center justify-between">
-              <p className="text-sm font-semibold text-white">Logo overlay</p>
+              <p className="text-sm font-semibold text-zinc-100">
+                Logo overlay
+              </p>
               <button
                 type="button"
                 onClick={clearLogo}
                 disabled={!logoUrl}
-                className="text-xs text-slate-400 underline-offset-2 hover:text-white hover:underline disabled:text-slate-600 disabled:no-underline"
+                className="text-xs text-zinc-500 underline-offset-2 hover:text-white hover:underline disabled:text-zinc-700 disabled:no-underline"
               >
                 Clear logo
               </button>
             </div>
-            <div className="flex flex-col gap-3 rounded-2xl border border-dashed border-white/15 bg-slate-900/50 p-4 text-center">
+            <div className="flex flex-col gap-3 rounded-2xl border border-dashed border-neutral-900 bg-neutral-950/40 p-4 text-center">
               <input
                 ref={logoInputRef}
                 type="file"
@@ -509,7 +513,7 @@ const QrCodeGeneratorPage = () => {
                   handleLogoUpload(event.target.files?.[0] ?? null)
                 }
               />
-              <p className="text-sm text-slate-300">
+              <p className="text-sm text-zinc-500">
                 Drop a logo or pick a PNG, JPG, or SVG file.
               </p>
               <div className="flex flex-col items-center gap-3">
@@ -517,19 +521,19 @@ const QrCodeGeneratorPage = () => {
                   <img
                     src={logoUrl}
                     alt="Logo preview"
-                    className="h-16 w-16 rounded-xl border border-white/10 object-contain"
+                    className="h-16 w-16 rounded-xl border border-neutral-800 object-contain"
                   />
                 ) : (
-                  <div className="h-16 w-16 rounded-xl border border-dashed border-white/15 text-xs text-slate-500">
+                  <div className="h-16 w-16 rounded-xl border border-dashed border-neutral-800 text-xs text-zinc-600">
                     <div className="flex h-full items-center justify-center">
                       No logo
                     </div>
                   </div>
                 )}
                 {logoFile ? (
-                  <p className="text-xs text-slate-400">{logoFile.name}</p>
+                  <p className="text-xs text-zinc-500">{logoFile.name}</p>
                 ) : (
-                  <p className="text-xs text-slate-500">
+                  <p className="text-xs text-zinc-600">
                     Recommended: square logo
                   </p>
                 )}
@@ -540,34 +544,34 @@ const QrCodeGeneratorPage = () => {
             </div>
           </div>
 
-          <div className="flex flex-wrap gap-3">
-            <PrimaryButton onClick={downloadPng} disabled={!isValid}>
-              Download PNG
-            </PrimaryButton>
-            <button
-              type="button"
-              onClick={downloadSvg}
-              disabled={!isValid}
-              className="inline-flex items-center justify-center rounded-full border border-white/20 bg-transparent px-5 py-2 text-sm text-slate-300 transition hover:border-white/40 hover:text-white disabled:cursor-not-allowed disabled:border-white/10 disabled:text-slate-500"
-            >
-              Download SVG
-            </button>
-            <button
-              type="button"
-              onClick={handleCopy}
-              disabled={!isValid}
-              className="inline-flex items-center justify-center rounded-full border border-white/20 bg-transparent px-5 py-2 text-sm text-slate-300 transition hover:border-white/40 hover:text-white disabled:cursor-not-allowed disabled:border-white/10 disabled:text-slate-500"
-            >
-              Copy content
-            </button>
-          </div>
+        <div className="flex flex-wrap gap-3">
+          <PrimaryButton onClick={downloadPng} disabled={!isValid}>
+            Download PNG
+          </PrimaryButton>
+          <button
+            type="button"
+            onClick={downloadSvg}
+            disabled={!isValid}
+            className="inline-flex items-center justify-center rounded-full border border-neutral-800 px-5 py-2 text-sm text-zinc-400 transition hover:border-neutral-600 hover:text-white disabled:cursor-not-allowed disabled:border-neutral-900 disabled:text-zinc-600"
+          >
+            Download SVG
+          </button>
+          <button
+            type="button"
+            onClick={handleCopy}
+            disabled={!isValid}
+            className="inline-flex items-center justify-center rounded-full border border-neutral-800 px-5 py-2 text-sm text-zinc-400 transition hover:border-neutral-600 hover:text-white disabled:cursor-not-allowed disabled:border-neutral-900 disabled:text-zinc-600"
+          >
+            Copy content
+          </button>
         </div>
+      </div>
 
-        <div className="glass-card flex h-full flex-col gap-6 p-8">
+        <div className="card flex h-full flex-col gap-6 border-neutral-900 p-8">
           {isValid ? (
             <>
               <div
-                className="flex rounded-2xl border border-white/10 p-6"
+                className="flex rounded-2xl border border-neutral-900 p-6"
                 style={{ background: previewBackground }}
               >
                 <div
@@ -594,13 +598,13 @@ const QrCodeGeneratorPage = () => {
                   ) : null}
                 </div>
               </div>
-              <p className="text-center text-sm text-slate-400">
+              <p className="text-center text-sm text-zinc-500">
                 {exportSize}px export · Error level {errorLevel} · Quiet zone{" "}
                 {quietZone}px
               </p>
             </>
           ) : (
-            <div className="grid h-64 w-full place-items-center rounded-2xl border border-dashed border-white/10 text-sm text-slate-500">
+            <div className="grid h-64 w-full place-items-center rounded-2xl border border-dashed border-neutral-900 text-sm text-zinc-600">
               Enter content to preview a QR code
             </div>
           )}

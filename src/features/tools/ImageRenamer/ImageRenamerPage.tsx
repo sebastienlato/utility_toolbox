@@ -41,7 +41,7 @@ const ImageRenamerPage = () => {
 
   return (
     <section className="space-y-10">
-      <div className="rounded-3xl border border-white/10 bg-gradient-to-br from-slate-900/80 via-slate-900/60 to-slate-900/30 p-10 shadow-[0_15px_80px_rgba(2,6,23,0.85)] backdrop-blur">
+      <div className="card border-neutral-900 p-10">
         <PageHeader
           eyebrow="Batch rename"
           title="Rename images with consistent patterns"
@@ -52,7 +52,7 @@ const ImageRenamerPage = () => {
       <div className="grid gap-8 lg:grid-cols-[1.1fr_0.9fr]">
         <div className="space-y-8">
           <div
-            className="glass-card flex flex-col items-center justify-center border-2 border-dashed border-white/15 p-10 text-center transition hover:border-emerald-400/60 hover:bg-white/10"
+            className="card flex flex-col items-center justify-center border-2 border-dashed border-neutral-800 bg-neutral-950/40 p-10 text-center transition hover:border-neutral-600 hover:bg-neutral-950"
             onDrop={onDrop}
             onDragOver={onDragOver}
             onClick={() => inputRef.current?.click()}
@@ -72,28 +72,28 @@ const ImageRenamerPage = () => {
               onChange={(event) => addFiles(event.target.files ?? undefined)}
             />
             <div className="space-y-4">
-              <p className="text-2xl font-semibold text-white">
+              <p className="text-2xl font-semibold text-zinc-100">
                 Drop your images or folders
               </p>
-              <p className="text-sm text-slate-400">
+              <p className="text-sm text-zinc-500">
                 PNG, JPG, WebP supported — drag entire folders or pick files.
               </p>
             </div>
-            <p className="mt-6 text-xs uppercase tracking-[0.4em] text-emerald-300/80">
+            <p className="mt-6 text-xs uppercase tracking-[0.4em] text-zinc-500">
               {hasFiles
                 ? `${renamedFiles.length} file(s) ready`
                 : "Waiting for files"}
             </p>
           </div>
 
-          <div className="glass-card p-8">
-            <h2 className="mb-6 text-lg font-semibold text-white">
+          <div className="card border-neutral-900 p-8">
+            <h2 className="mb-6 text-lg font-semibold text-zinc-100">
               Naming pattern
             </h2>
             <div className="grid gap-6 md:grid-cols-4">
               <div className="space-y-2">
-                <label className="text-sm text-slate-300">
-                  Base name
+                <label className="space-y-2">
+                  <span className="label text-[0.6rem]">Base name</span>
                   <input
                     type="text"
                     value={pattern.baseName}
@@ -101,13 +101,13 @@ const ImageRenamerPage = () => {
                       updatePattern("baseName", event.target.value)
                     }
                     placeholder="holiday-photo"
-                    className="mt-1 w-full rounded-2xl border border-white/10 bg-slate-900/60 px-4 py-2 text-sm text-white placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-emerald-400/70"
+                    className="input"
                   />
                 </label>
               </div>
               <div className="space-y-2">
-                <label className="text-sm text-slate-300">
-                  Starting index
+                <label className="space-y-2">
+                  <span className="label text-[0.6rem]">Starting index</span>
                   <input
                     type="number"
                     min={0}
@@ -115,13 +115,13 @@ const ImageRenamerPage = () => {
                     onChange={(event) =>
                       updatePattern("startIndex", Number(event.target.value))
                     }
-                    className="mt-1 w-full rounded-2xl border border-white/10 bg-slate-900/60 px-4 py-2 text-sm text-white focus:outline-none focus:ring-2 focus:ring-emerald-400/70"
+                    className="input"
                   />
                 </label>
               </div>
               <div className="space-y-2">
-                <label className="text-sm text-slate-300">
-                  Delimiter
+                <label className="space-y-2">
+                  <span className="label text-[0.6rem]">Delimiter</span>
                   <input
                     type="text"
                     value={pattern.delimiter}
@@ -129,19 +129,19 @@ const ImageRenamerPage = () => {
                       updatePattern("delimiter", event.target.value)
                     }
                     placeholder="-"
-                    className="mt-1 w-full rounded-2xl border border-white/10 bg-slate-900/60 px-4 py-2 text-sm text-white focus:outline-none focus:ring-2 focus:ring-emerald-400/70"
+                    className="input"
                   />
                 </label>
               </div>
               <div className="space-y-2 md:col-span-2">
-                <label className="text-sm text-slate-300">
-                  Output format
+                <label className="space-y-2">
+                  <span className="label text-[0.6rem]">Output format</span>
                   <select
                     value={outputFormat}
                     onChange={(event) =>
                       setOutputFormat(event.target.value as OutputFormat)
                     }
-                    className="mt-1 w-full rounded-2xl border border-white/10 bg-slate-900/60 px-4 py-2 text-sm text-white focus:outline-none focus:ring-2 focus:ring-emerald-400/70"
+                    className="input"
                   >
                     <option value="original">Keep original</option>
                     <option value="image/png">PNG</option>
@@ -161,7 +161,7 @@ const ImageRenamerPage = () => {
                 type="button"
                 onClick={clearFiles}
                 disabled={!hasFiles}
-                className="inline-flex items-center justify-center rounded-full border border-white/20 bg-transparent px-5 py-2 text-sm text-slate-300 transition hover:border-white/40 hover:text-white disabled:cursor-not-allowed disabled:border-white/10 disabled:text-slate-500"
+                className="inline-flex items-center justify-center rounded-full border border-neutral-800 px-5 py-2 text-sm text-zinc-400 transition hover:border-neutral-600 hover:text-white disabled:cursor-not-allowed disabled:border-neutral-900 disabled:text-zinc-600"
               >
                 Clear list
               </button>
@@ -169,17 +169,17 @@ const ImageRenamerPage = () => {
           </div>
         </div>
 
-        <div className="glass-card p-6">
+        <div className="card border-neutral-900 p-6">
           <div className="mb-4 flex items-center justify-between">
             <div>
-              <h3 className="text-lg font-semibold text-white">
+              <h3 className="text-lg font-semibold text-zinc-100">
                 Preview & queue
               </h3>
-              <p className="text-sm text-slate-400">
+              <p className="text-sm text-zinc-500">
                 Original vs. generated filenames
               </p>
             </div>
-            <span className="rounded-full border border-white/10 px-3 py-1 text-xs text-slate-400">
+            <span className="rounded-full border border-neutral-900 px-3 py-1 text-xs text-zinc-500">
               {hasFiles ? `${renamedFiles.length} files` : "Empty"}
             </span>
           </div>
@@ -189,7 +189,7 @@ const ImageRenamerPage = () => {
               {renamedFiles.map((file) => (
                 <li
                   key={file.id}
-                  className="flex flex-col gap-4 rounded-2xl border border-white/10 bg-slate-900/50 p-4 md:flex-row md:items-center"
+                  className="flex flex-col gap-4 rounded-2xl border border-neutral-900 bg-neutral-950/40 p-4 md:flex-row md:items-center"
                 >
                   <div className="flex items-center gap-4">
                     <img
@@ -198,11 +198,11 @@ const ImageRenamerPage = () => {
                       className="h-16 w-16 rounded-xl object-cover"
                     />
                     <div>
-                      <p className="text-sm text-slate-400">Original</p>
-                      <p className="font-medium text-white">
+                      <p className="text-sm text-zinc-500">Original</p>
+                      <p className="font-medium text-zinc-100">
                         {file.originalName}
                       </p>
-                      <p className="mt-1 text-xs text-emerald-300">
+                      <p className="mt-1 text-xs text-zinc-400">
                         → {file.newName}
                       </p>
                     </div>
@@ -214,7 +214,7 @@ const ImageRenamerPage = () => {
                     <button
                       type="button"
                       onClick={() => removeFile(file.id)}
-                      className="text-xs text-slate-400 underline-offset-2 hover:text-white hover:underline"
+                      className="text-xs text-zinc-500 underline-offset-2 hover:text-white hover:underline"
                     >
                       Remove
                     </button>
@@ -223,7 +223,7 @@ const ImageRenamerPage = () => {
               ))}
             </ul>
           ) : (
-            <div className="grid h-64 place-items-center rounded-2xl border border-dashed border-white/10 text-sm text-slate-500">
+            <div className="grid h-64 place-items-center rounded-2xl border border-dashed border-neutral-900 text-sm text-zinc-600">
               Drop files to see previews
             </div>
           )}

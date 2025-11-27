@@ -146,7 +146,7 @@ const ImageResizerPage = () => {
 
   return (
     <section className="space-y-10">
-      <div className="glass-card p-10">
+      <div className="card border-neutral-900 p-10">
         <PageHeader
           eyebrow="Resize"
           title="Resize images directly in your browser"
@@ -157,7 +157,7 @@ const ImageResizerPage = () => {
       <div className="grid gap-8 lg:grid-cols-[1.05fr_0.95fr]">
         <div className="space-y-8">
           <div
-            className="glass-card flex flex-col items-center justify-center border-2 border-dashed border-white/15 p-10 text-center transition hover:border-emerald-400/60 hover:bg-white/10"
+            className="card flex flex-col items-center justify-center border-2 border-dashed border-neutral-800 bg-neutral-950/40 p-10 text-center transition hover:border-neutral-600 hover:bg-neutral-950"
             onDrop={handleDrop}
             onDragOver={handleDragOver}
             onClick={() => inputRef.current?.click()}
@@ -171,28 +171,28 @@ const ImageResizerPage = () => {
               onChange={(event) => addFiles(event.target.files)}
             />
             <div className="space-y-4">
-              <p className="text-2xl font-semibold text-white">
+              <p className="text-2xl font-semibold text-zinc-100">
                 Drop images to resize
               </p>
-              <p className="text-sm text-slate-400">
+              <p className="text-sm text-zinc-500">
                 Handles PNG, JPG, WebP — stays entirely client-side.
               </p>
             </div>
-            <p className="mt-6 text-xs uppercase tracking-[0.4em] text-emerald-300/80">
+            <p className="mt-6 text-xs uppercase tracking-[0.4em] text-zinc-500">
               {hasFiles
                 ? `${queue.length} file(s) queued`
                 : "Waiting for files"}
             </p>
           </div>
 
-          <div className="glass-card p-8">
-            <h2 className="mb-6 text-lg font-semibold text-white">
+          <div className="card border-neutral-900 p-8">
+            <h2 className="mb-6 text-lg font-semibold text-zinc-100">
               Resize options
             </h2>
             <div className="grid gap-6 md:grid-cols-2">
               <div>
-                <label className="text-sm text-slate-300">
-                  Width (px)
+                <label className="space-y-2">
+                  <span className="label text-[0.6rem]">Width (px)</span>
                   <input
                     type="number"
                     min={1}
@@ -201,13 +201,13 @@ const ImageResizerPage = () => {
                       updateOption("width", event.target.value)
                     }
                     placeholder="e.g., 1024"
-                    className="mt-1 w-full rounded-2xl border border-white/10 bg-slate-900/60 px-4 py-2 text-sm text-white placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-emerald-400/70"
+                    className="input"
                   />
                 </label>
               </div>
               <div>
-                <label className="text-sm text-slate-300">
-                  Height (px)
+                <label className="space-y-2">
+                  <span className="label text-[0.6rem]">Height (px)</span>
                   <input
                     type="number"
                     min={1}
@@ -216,32 +216,32 @@ const ImageResizerPage = () => {
                       updateOption("height", event.target.value)
                     }
                     placeholder="auto"
-                    className="mt-1 w-full rounded-2xl border border-white/10 bg-slate-900/60 px-4 py-2 text-sm text-white placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-emerald-400/70"
+                    className="input"
                   />
                 </label>
               </div>
-              <div className="flex items-center gap-3 rounded-2xl border border-white/10 bg-slate-900/60 px-4 py-3">
+              <div className="flex items-center gap-3 rounded-2xl border border-neutral-900 bg-neutral-950/40 px-4 py-3">
                 <input
                   type="checkbox"
                   checked={options.preserveAspectRatio}
                   onChange={(event) =>
                     updateOption("preserveAspectRatio", event.target.checked)
                   }
-                  className="h-4 w-4 rounded border-white/20 bg-transparent text-emerald-400 focus:ring-emerald-400/80"
+                  className="h-4 w-4 rounded border-neutral-700 bg-transparent text-zinc-200 focus:ring-neutral-600"
                 />
-                <span className="text-sm text-slate-300">
+                <span className="text-sm text-zinc-400">
                   Preserve aspect ratio
                 </span>
               </div>
               <div>
-                <label className="text-sm text-slate-300">
-                  Output format
+                <label className="space-y-2">
+                  <span className="label text-[0.6rem]">Output format</span>
                   <select
                     value={options.format}
                     onChange={(event) =>
                       updateOption("format", event.target.value)
                     }
-                    className="mt-1 w-full rounded-2xl border border-white/10 bg-slate-900/60 px-4 py-2 text-sm text-white focus:outline-none focus:ring-2 focus:ring-emerald-400/70"
+                    className="input"
                   >
                     {formats.map((format) => (
                       <option key={format.value} value={format.value}>
@@ -264,7 +264,7 @@ const ImageResizerPage = () => {
                 type="button"
                 onClick={clearQueue}
                 disabled={!hasFiles}
-                className="inline-flex items-center justify-center rounded-full border border-white/20 bg-transparent px-5 py-2 text-sm text-slate-300 transition hover:border-white/40 hover:text-white disabled:cursor-not-allowed disabled:border-white/10 disabled:text-slate-500"
+                className="inline-flex items-center justify-center rounded-full border border-neutral-800 px-5 py-2 text-sm text-zinc-400 transition hover:border-neutral-600 hover:text-white disabled:cursor-not-allowed disabled:border-neutral-900 disabled:text-zinc-600"
               >
                 Clear queue
               </button>
@@ -272,15 +272,15 @@ const ImageResizerPage = () => {
           </div>
         </div>
 
-        <div className="glass-card p-6">
+        <div className="card border-neutral-900 p-6">
           <div className="mb-4 flex items-center justify-between">
             <div>
-              <h3 className="text-lg font-semibold text-white">Preview</h3>
-              <p className="text-sm text-slate-400">
+              <h3 className="text-lg font-semibold text-zinc-100">Preview</h3>
+              <p className="text-sm text-zinc-500">
                 Original vs resized dimensions
               </p>
             </div>
-            <span className="rounded-full border border-white/10 px-3 py-1 text-xs text-slate-400">
+            <span className="rounded-full border border-neutral-900 px-3 py-1 text-xs text-zinc-500">
               {processedCount}/{queue.length || 0} processed
             </span>
           </div>
@@ -290,7 +290,7 @@ const ImageResizerPage = () => {
               {queue.map((item) => (
                 <li
                   key={item.id}
-                  className="flex flex-col gap-4 rounded-2xl border border-white/10 bg-slate-900/50 p-4 md:flex-row md:items-center"
+                  className="flex flex-col gap-4 rounded-2xl border border-neutral-900 bg-neutral-950/40 p-4 md:flex-row md:items-center"
                 >
                   <div className="flex items-center gap-4">
                     <img
@@ -299,8 +299,8 @@ const ImageResizerPage = () => {
                       className="h-16 w-16 rounded-xl object-cover"
                     />
                     <div>
-                      <p className="text-sm text-slate-400">{item.file.name}</p>
-                      <p className="text-xs text-slate-500">
+                      <p className="text-sm text-zinc-400">{item.file.name}</p>
+                      <p className="text-xs text-zinc-600">
                         {item.originalWidth && item.originalHeight
                           ? `${item.originalWidth} × ${item.originalHeight}`
                           : "Detecting size…"}
@@ -310,7 +310,7 @@ const ImageResizerPage = () => {
                   <div className="flex flex-1 flex-col items-stretch justify-center gap-2 md:items-end">
                     {item.resized ? (
                       <>
-                        <p className="text-xs text-emerald-300">
+                        <p className="text-xs text-zinc-400">
                           → {item.resized.width} × {item.resized.height}
                         </p>
                         <PrimaryButton onClick={() => downloadFile(item)}>
@@ -319,7 +319,7 @@ const ImageResizerPage = () => {
                         </PrimaryButton>
                       </>
                     ) : (
-                      <span className="text-xs text-slate-400">
+                      <span className="text-xs text-zinc-500">
                         {isProcessing ? "Processing…" : "Awaiting resize"}
                       </span>
                     )}
@@ -328,7 +328,7 @@ const ImageResizerPage = () => {
               ))}
             </ul>
           ) : (
-            <div className="grid h-64 place-items-center rounded-2xl border border-dashed border-white/10 text-sm text-slate-500">
+            <div className="grid h-64 place-items-center rounded-2xl border border-dashed border-neutral-900 text-sm text-zinc-600">
               Upload files to preview sizes
             </div>
           )}

@@ -1,119 +1,309 @@
 # Codex Prompt — Useful Tools
 
-You are Codex working inside an existing **React + Vite + Tailwind** project named **Useful Tools**.
+You are Codex working inside an existing **React + Vite + Tailwind + TypeScript** project named **Useful Tools**.
 
-## Context & Constraints
+The user controls the repo, Git history, and `plan.md`.  
+Your job is to implement features **phase-by-phase**, in small, reviewable chunks.
 
-- The project has ALREADY been created by the user using Vite and Tailwind.
+---
+
+## 1. Context & Hard Constraints
+
+- The project has **already** been created by the user.
 - Do **NOT**:
   - Recreate or reinitialize the project.
-  - Run scaffolding commands (e.g., `npm create vite@latest`, `npx tailwindcss init`, etc.).
-  - Replace existing config files unless the user explicitly asks.
-- You may **add dependencies** (e.g. `react-router-dom`, `qrcode.react`) and minimal config changes required for them to work.
+  - Run scaffolding commands (`npm create vite@latest`, `pnpm create`, etc.).
+  - Initialize Tailwind or replace Vite/Tailwind configs.
+  - Overwrite global configs unless the user explicitly asks.
+- You _may_:
+  - Add lightweight dependencies required for features in `plan.md`.
+  - Add minimal config needed for those dependencies.
 
-- Detect whether the project uses **TypeScript or JavaScript** by inspecting `src/` and follow that choice consistently.
+**Language:**  
+Use **TypeScript** unless the repo clearly uses `.jsx`/`.js`.
 
-## Source of Truth
+---
 
-- **Follow `plan.md` as the main roadmap.**
-- Use `architecture.md` as a reference for structure and how to add tools.
-- Do **NOT** edit `plan.md` or `codex_prompt.md` unless explicitly requested.
-- If something in `plan.md` is ambiguous, make a reasonable assumption and clearly explain it in your notes.
+## 2. Sources of Truth
 
-## Workflow Style
+Codex must strictly follow:
 
-Work in **small, reviewable steps**:
+- `plan.md` → **Phase-by-phase roadmap**
+- `architecture.md` → **Folder structure + naming conventions**
+- `toolRegistry.ts` → **List of tools, routes, metadata**
 
-1. Before making changes:
+Do **NOT** modify `plan.md` or `codex_prompt.md` unless explicitly told.
 
-   - Briefly restate which **Phase** and **Tasks** from `plan.md` you’re working on.
+When `plan.md` is ambiguous:
 
-2. Implement only what is in that phase.
+- Make a reasonable assumption.
+- State it clearly.
 
-3. After changes:
+---
 
-   - Show a concise summary of what changed (file-by-file).
-   - Show a meaningful diff snippet for key files (not the entire project).
-   - Propose a **multi-line commit message** in this format:
+## 3. Workflow Rules (Super Important)
 
-     ```bash
-     git commit -m "feat: short summary" \
-       -m "  - bullet 1" \
-       -m "  - bullet 2" \
-       -m "  - bullet 3"
-     ```
+### For _every_ phase:
 
-4. Then **stop** and wait for user confirmation before starting the next phase.
+#### 1. Restate phase scope
 
-## Code & Architecture Guidelines
+At the top of the response:
 
-- Use the **folder structure** described in `architecture.md` as a target (or refactor gently towards it).
-- Prefer:
+> “Phase X — Doing Y (according to plan.md)”
 
-  - `src/features/...` for feature-specific screens and logic.
-  - `src/components/...` for shared UI components (cards, buttons, layout).
-  - `src/services/...` for reusable business logic.
-  - A **tool registry** for central metadata about each tool.
+#### 2. Implement ONLY that phase
 
-- UI:
+No sneak-ahead.  
+No extra refactors.  
+No future features.
 
-  - Use **Tailwind CSS** classes for styling.
-  - Aim for a modern, slightly glassy, dark theme unless existing design dictates otherwise.
-  - Ensure responsive design (mobile → desktop).
-  - Keep JSX clean and readable (avoid deeply nested inline logic inside JSX where possible).
+#### 3. After implementation, ALWAYS provide:
 
-- Routing:
-  - Use `react-router-dom` for SPA navigation:
-    - `/` → Home (tool hub).
-    - Named routes for each tool (e.g., `/image-resizer`).
-  - Prefer a central router setup with lazy-loaded routes if appropriate.
+### **A. File-by-file summary**
 
-## Tools Behavior (High-level)
+Example:
 
-- **Background removal**:
+```txt
+- src/features/tools/ImageRenamer/ImageRenamerPage.tsx:1-210 – added full UI (upload, form, preview, downloads)
+- src/features/tools/ImageRenamer/useImageRenamer.ts:1-140 – added core rename logic, cleanup, and helpers
+```
 
-  - Build the UI and abstraction for background removal.
-  - Implement logic via a **service** that is stubbed but structured for a real API.
-  - Provide clear `TODO` comments where an external API would plug in.
+### **B. Meaningful diff snippets**
 
-- **Image renamer**:
+Only relevant snippets, never whole files.
 
-  - Allow multiple images to be uploaded.
-  - Configure filename patterns.
-  - Download renamed files.
-  - Use clean state management (hooks or small store).
+### **C. A ready Git block**
 
-- **Image resizer**:
+Always in this format:
 
-  - Use `<canvas>` for client-side resizing.
-  - Allow download of resized output.
+```bash
+git add .
+git commit -m "feat: phase X — short summary"   -m "  - bullet 1"   -m "  - bullet 2"   -m "  - bullet 3"
+git push
+```
 
-- **QR code generator**:
-  - Use a QR library to generate QR codes.
-  - Support basic options (size, error correction).
-  - Allow download of PNG output.
+### **D. Stop and wait**
 
-## Quality Bar
+End every phase with:
 
-- Prioritize **clarity and maintainability**:
+> “Phase X is complete.  
+> When you’re ready, I can continue with Phase Y — [name].”
 
-  - Meaningful component names.
-  - Small, focused components.
-  - Comments where logic is non-obvious.
+Never proceed without user confirmation.
 
-- Accessibility:
+---
 
-  - Use semantic HTML (`<main>`, `<header>`, `<button>`, `<label>`, etc.).
-  - Ensure keyboard navigation and focus states are clear.
+## 4. Architecture Rules
 
-- Do **not** introduce unnecessary dependencies.
-- Extract reusable patterns (e.g., a `ToolPageShell`) where appropriate.
+Follow `architecture.md` exactly.
 
-## If You Get Stuck
+### The structure:
 
-- If a step in `plan.md` is blocked due to missing context or conflicting code:
-  - Explain the issue.
-  - Propose 1–2 ways to proceed.
-  - Wait for user confirmation.
+```txt
+src/
+  main.tsx
+  App.tsx
 
-Remember: Follow `plan.md` phase by phase, keep changes tight and reviewable, and always propose a **multi-line commit message** at the end of each phase.
+  components/
+    PageHeader.tsx
+    PrimaryButton.tsx
+    ToolCard.tsx
+
+  features/
+    home/
+      HomePage.tsx
+
+    tools/
+      toolRegistry.ts
+
+      BackgroundRemoval/
+        BackgroundRemovalPage.tsx
+
+      ImageRenamer/
+        ImageRenamerPage.tsx
+        useImageRenamer.ts
+
+      ImageResizer/
+        ImageResizerPage.tsx
+
+      QrCodeGenerator/
+        QrCodeGeneratorPage.tsx
+
+      ImageCompressor/
+        ImageCompressorPage.tsx
+
+      ImageFormatConverter/
+        ImageFormatConverterPage.tsx
+
+      PdfTools/
+        PdfToolsPage.tsx
+
+      TextCaseConverter/
+        TextCaseConverterPage.tsx
+        textCaseUtils.ts
+
+      ColorPaletteExtractor/
+        ColorPaletteExtractorPage.tsx
+
+      FaviconGenerator/
+        FaviconGeneratorPage.tsx
+
+      ImageFilters/
+        ImageFiltersPage.tsx
+
+  services/
+    backgroundRemovalService.ts
+    imageResizeService.ts
+    imageCompressorService.ts
+    imageFormatService.ts
+    pdfToolsService.ts
+    colorPaletteService.ts
+    imageFiltersService.ts
+
+  styles/
+    index.css
+```
+
+### Routing rules:
+
+All routes must exist in `<App />` using:
+
+```tsx
+<Routes>
+  <Route path="/" element={<HomePage />} />
+  <Route path="/background-removal" element={<BackgroundRemovalPage />} />
+  <Route path="/image-renamer" element={<ImageRenamerPage />} />
+  <Route path="/image-resizer" element={<ImageResizerPage />} />
+  <Route path="/qr-code-generator" element={<QrCodeGeneratorPage />} />
+
+  <Route path="/image-compressor" element={<ImageCompressorPage />} />
+  <Route
+    path="/image-format-converter"
+    element={<ImageFormatConverterPage />}
+  />
+  <Route path="/pdf-tools" element={<PdfToolsPage />} />
+  <Route path="/text-case-converter" element={<TextCaseConverterPage />} />
+  <Route
+    path="/color-palette-extractor"
+    element={<ColorPaletteExtractorPage />}
+  />
+  <Route path="/favicon-generator" element={<FaviconGeneratorPage />} />
+  <Route path="/image-filters" element={<ImageFiltersPage />} />
+</Routes>
+```
+
+---
+
+## 5. UI & Theme Rules
+
+- Use Tailwind exclusively.
+- The global theme is **dark monochrome / shadcn-inspired**.
+- Reuse:
+  - glass-card surfaces
+  - soft borders
+  - subtle shadows
+  - radial gradients
+  - smooth transitions
+- Inputs must have:
+  - `focus-visible:ring`
+  - rounded-md or rounded-lg
+  - good contrast
+
+Tool pages must all follow the same pattern:
+
+- PageHeader at the top
+- glass-card panel for the main tool UI
+- responsive layout
+- consistent spacing
+
+---
+
+## 6. Tool Behavior (High-level)
+
+### Background Removal
+
+- Use the existing color-key method unless user chooses ML mode (future).
+- Must show:
+  - drag/drop uploader
+  - original preview
+  - processed preview
+  - download button
+
+### Image Renamer
+
+- Multi-file upload
+- Pattern form (base name, index, delimiter)
+- Preview table (original → new)
+- Download all
+- Remove/cancel items
+
+### Image Resizer
+
+- Canvas resize
+- Width/height
+- Preserve aspect ratio
+- Output format select
+- Before/after info
+
+### QR Code Generator
+
+- Text input + options
+- Size + error correction
+- Download PNG + SVG
+- Logo overlay support
+
+### Image Compressor
+
+- Quality slider (0–100)
+- Show before/after size
+- Download result
+
+### Image Format Converter
+
+- Convert between JPG/PNG/WebP/SVG (when valid)
+- Batch support
+
+### PDF Tools
+
+- Merge PDFs
+- Extract pages
+- Compress (basic)
+- Preview thumbnails
+
+### Text Case Converter
+
+- Uppercase, lowercase, title case, sentence case
+- Clear and copy buttons
+
+### Color Palette Extractor
+
+- Upload image
+- Extract dominant colors
+- Show HEX/RGB
+- Copy buttons
+
+### Favicon Generator
+
+- Upload image/logo
+- Generate different sizes
+- Export zip
+
+### Image Filters
+
+- Apply: grayscale, sepia, blur, brightness, contrast
+- Compare before/after
+
+---
+
+## 7. If You Get Stuck
+
+If anything does not match plan.md or conflicts with existing code:
+
+- Stop immediately.
+- Explain the issue clearly.
+- Offer 1–2 possible solutions.
+- Wait for user confirmation.
+
+---
+
+You must follow all rules above for every phase.

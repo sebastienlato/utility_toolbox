@@ -317,3 +317,289 @@ Use **Tailwind CSS** for all styling.
 
 - Docs are updated and consistent with the implementation.
 - A final **suggested commit message** is provided.
+
+---
+
+## Phase 9 — Image Compressor Tool
+
+**Goal:** Compress images client-side to reduce file size while preserving acceptable quality.
+
+### Tasks
+
+- Add a new route and page:
+
+  - Route: `/image-compressor`.
+  - Page component: `ImageCompressorPage` under `src/features/tools/ImageCompressor/ImageCompressorPage.(tsx|jsx)`.
+
+- Implement `ImageCompressorPage` with:
+
+  - Multi-file upload of images.
+  - Controls for:
+    - Target quality (`0.1–1.0` range for JPEG/WebP).
+    - Optional maximum width/height (reusing logic from the resizer if helpful).
+    - Output format (at least `JPEG` and `WEBP`, fallback to original if unsupported).
+  - A queue/list view showing:
+    - Original file name and size.
+    - Estimated or actual compressed size (after processing).
+  - Per-item actions:
+    - “Compress” or “Compress all”.
+    - “Download” compressed image.
+    - “Remove” from queue.
+  - Global actions:
+    - “Clear all”.
+    - (Optional) “Download all compressed” (simple loop over links).
+
+- Create a compression helper/service, e.g.:
+
+  - `src/services/imageCompressorService.(ts|js)` or
+  - A local helper in `ImageCompressor` feature.
+
+  The service should:
+
+  - Use `<canvas>` to re-encode images in a lossy format (JPEG/WEBP) using `toDataURL` or `toBlob` with a quality parameter.
+  - Return compressed `Blob`s plus metadata (size, mime type).
+
+- UX:
+
+  - Show progress/loading states while compressing.
+  - Disable compression actions when no files are selected.
+  - Handle errors gracefully (e.g. unsupported formats).
+
+### Stop after
+
+- Users can load several images, tweak compression settings, and download noticeably smaller files.
+- A **suggested commit message** is provided.
+
+---
+
+## Phase 10 — Image Format Converter Tool
+
+**Goal:** Convert images between common formats (PNG, JPEG, WEBP) client-side.
+
+### Tasks
+
+- Add a new route and page:
+
+  - Route: `/image-format-converter`.
+  - Page: `ImageFormatConverterPage` in `src/features/tools/ImageFormatConverter/ImageFormatConverterPage.(tsx|jsx)`.
+
+- Implement `ImageFormatConverterPage` with:
+
+  - Multi-file upload of images.
+  - A simple control to choose **output format**:
+    - `PNG`, `JPEG`, `WEBP` (as supported by the browser).
+  - Optional quality slider when converting to JPEG/WEBP.
+  - A results list showing:
+    - Original file name, type, size.
+    - New type and size (after conversion).
+  - Actions:
+    - Convert individual item.
+    - Convert all.
+    - Download individual converted files.
+    - (Optional) “Download all converted”.
+
+- Implement a small conversion helper/service, e.g.:
+
+  - `src/services/imageFormatService.(ts|js)`.
+
+  The service should:
+
+  - Take an input file, desired target format, and optional quality.
+  - Use `<canvas>` to render and export to the requested format.
+  - Return a `Blob` + object URL.
+
+### Stop after
+
+- Format conversion works reliably for at least PNG/JPEG/WEBP.
+- UI is consistent with other tools.
+- A **suggested commit message** is provided.
+
+---
+
+## Phase 11 — PDF Tools (Merge & Basic Compress)
+
+**Goal:** Provide a simple PDF utilities page, starting with **PDF merge** and optional basic compression.
+
+### Tasks
+
+- Add a new route and page:
+
+  - Route: `/pdf-tools`.
+  - Page: `PdfToolsPage` under `src/features/tools/PdfTools/PdfToolsPage.(tsx|jsx)`.
+
+- Use a lightweight client-side library such as `pdf-lib` (or similar) if available:
+
+  - If adding a dependency, document it in `README.md`.
+  - Keep the implementation minimal and focused on merge.
+
+- Implement `PdfToolsPage` with:
+
+  - Upload area for multiple PDFs (and optionally images to convert to a PDF).
+  - A list of files with:
+    - File name.
+    - Size.
+    - Drag-and-drop reordering to control merge order (if reasonable).
+  - Controls:
+    - “Merge PDFs” (creates a single merged PDF).
+    - (Optional) “Basic compress” toggle if the library supports it or by downscaling embedded images.
+
+- Output:
+
+  - Provide a download for the merged PDF.
+  - Show resulting size.
+
+### Stop after
+
+- Multiple PDFs can be merged into a single downloadable file.
+- Any compression logic is clearly documented or marked as TODO.
+- A **suggested commit message** is provided.
+
+---
+
+## Phase 12 — Text Case Converter Tool
+
+**Goal:** Provide a simple but powerful text-case transformer for common developer/writer needs.
+
+### Tasks
+
+- Add a new route and page:
+
+  - Route: `/text-case-converter`.
+  - Page: `TextCaseConverterPage` in `src/features/tools/TextCaseConverter/TextCaseConverterPage.(tsx|jsx)`.
+
+- Implement `TextCaseConverterPage` with:
+
+  - A large textarea for input text.
+  - A set of buttons or a select for transformations:
+    - `lowercase`
+    - `UPPERCASE`
+    - `Title Case`
+    - `Sentence case`
+    - `snake_case`
+    - `kebab-case`
+    - `camelCase`
+    - `PascalCase`
+  - Read-only output display with:
+    - “Copy result” button.
+    - Optional “Swap input with output” button.
+
+- Implement transformation logic in a small pure helper, e.g.:
+
+  - `src/features/tools/TextCaseConverter/textCaseUtils.(ts|js)`.
+
+### Stop after
+
+- All listed text-case conversions behave correctly on typical strings.
+- The tool feels instant and responsive.
+- A **suggested commit message** is provided.
+
+---
+
+## Phase 13 — Color Palette Extractor Tool
+
+**Goal:** Extract a color palette from an uploaded image and present usable hex values.
+
+### Tasks
+
+- Add a new route and page:
+
+  - Route: `/color-palette-extractor`.
+  - Page: `ColorPaletteExtractorPage` in `src/features/tools/ColorPaletteExtractor/ColorPaletteExtractorPage.(tsx|jsx)`.
+
+- Implementation:
+
+  - Allow single-image upload.
+  - Use either:
+    - A small color extraction library (e.g. `color-thief`-style), or
+    - Custom canvas-based sampling (downscale image, cluster colors with a simple algorithm).
+
+- UI:
+
+  - Show the original image preview.
+  - Display a grid of extracted colors (e.g. top 5–10).
+  - For each color:
+    - Show a color swatch.
+    - Display hex and RGB values.
+    - Provide a “Copy hex” button.
+
+- Options:
+
+  - Let users choose how many colors to extract (e.g. 5, 8, 10).
+
+### Stop after
+
+- Given an input image, the tool shows a reasonable palette with copyable values.
+- A **suggested commit message** is provided.
+
+---
+
+## Phase 14 — Favicon / ICO Generator Tool
+
+**Goal:** Generate favicon-ready assets from an uploaded square image.
+
+### Tasks
+
+- Add a new route and page:
+
+  - Route: `/favicon-generator`.
+  - Page: `FaviconGeneratorPage` in `src/features/tools/FaviconGenerator/FaviconGeneratorPage.(tsx|jsx)`.
+
+- Implement `FaviconGeneratorPage` with:
+
+  - Single-image upload (recommend square PNG/JPEG/SVG for best results).
+  - A set of target sizes (checkboxes or fixed list):
+    - 16×16
+    - 32×32
+    - 48×48
+    - 64×64
+    - 128×128
+    - 180×180
+    - 256×256
+    - 512×512
+  - Use `<canvas>` to resize the image to each selected size.
+
+- Output options:
+
+  - Download individual PNGs per size.
+  - (Optional) Bundle all PNGs into a `.zip` using a lightweight zip library.
+  - (Optional) Provide a basic `.ico` file if feasible, or leave as a TODO with notes.
+
+### Stop after
+
+- Users can upload an image and download at least multiple favicon PNG sizes.
+- A **suggested commit message** is provided.
+
+---
+
+## Phase 15 — Image Filters & Blur Tool
+
+**Goal:** Apply simple effects (blur and other filters) to images client-side and export the result.
+
+### Tasks
+
+- Add a new route and page:
+
+  - Route: `/image-filters`.
+  - Page: `ImageFiltersPage` in `src/features/tools/ImageFilters/ImageFiltersPage.(tsx|jsx)`.
+
+- Implement `ImageFiltersPage` with:
+
+  - Single or multi-image upload.
+  - Controls for filters (using either CSS filters on `<canvas>` drawing or manual pixel manipulation):
+    - Blur
+    - Brightness
+    - Contrast
+    - Saturation
+    - Grayscale
+  - Live preview:
+    - Show original vs filtered image side by side, or with a toggle.
+
+- Processing:
+
+  - Use `<canvas>` to apply filters and export filtered images as PNG/JPEG.
+  - Allow per-image “Apply & Download” button.
+
+### Stop after
+
+- Users can tweak filter sliders, see the changes, and download the filtered image.
+- A **suggested commit message** is provided.

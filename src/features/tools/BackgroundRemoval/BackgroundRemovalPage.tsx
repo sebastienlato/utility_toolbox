@@ -58,7 +58,7 @@ const BackgroundRemovalPage = () => {
 
   return (
     <section className="space-y-10">
-      <div className="glass-card p-10">
+      <div className="card border-neutral-900 p-10">
         <PageHeader
           eyebrow="Images"
           title="Background Removal"
@@ -70,7 +70,7 @@ const BackgroundRemovalPage = () => {
         <div
           onDrop={onDrop}
           onDragOver={onDragOver}
-          className="glass-card flex cursor-pointer flex-col items-center justify-center border-2 border-dashed border-white/15 p-10 text-center transition hover:border-emerald-400/60 hover:bg-white/10"
+          className="card flex cursor-pointer flex-col items-center justify-center border-2 border-dashed border-neutral-800 bg-neutral-950/40 p-10 text-center transition hover:border-neutral-600 hover:bg-neutral-950"
           onClick={() => inputRef.current?.click()}
         >
           <input
@@ -81,10 +81,10 @@ const BackgroundRemovalPage = () => {
             onChange={(event) => handleFiles(event.target.files)}
           />
           <div className="space-y-4">
-            <p className="text-2xl font-semibold text-white">Drag & drop</p>
-            <p className="text-sm text-slate-400">or click to browse files</p>
+            <p className="text-2xl font-semibold text-zinc-100">Drag & drop</p>
+            <p className="text-sm text-zinc-500">or click to browse files</p>
           </div>
-          <p className="mt-6 text-xs uppercase tracking-[0.4em] text-emerald-300/80">
+          <p className="mt-6 text-xs uppercase tracking-[0.4em] text-zinc-500">
             {statusLabel}
           </p>
         </div>
@@ -138,7 +138,7 @@ const PreviewPanel = ({
   const renderState = () => {
     if (status === "processing") {
       return (
-        <div className="grid min-h-[220px] place-items-center rounded-2xl border border-white/10 bg-white/5 text-slate-400">
+        <div className="grid min-h-[220px] place-items-center rounded-2xl border border-neutral-900 bg-neutral-900/60 text-zinc-500">
           Processing…
         </div>
       );
@@ -146,7 +146,7 @@ const PreviewPanel = ({
 
     if (imageUrl) {
       return (
-        <div className="relative flex min-h-[220px] items-center justify-center rounded-2xl border border-white/10 bg-slate-900/70 p-3">
+        <div className="relative flex min-h-[220px] items-center justify-center rounded-2xl border border-neutral-900 bg-neutral-950 p-3">
           <img
             src={imageUrl}
             alt={`${title} preview`}
@@ -157,17 +157,17 @@ const PreviewPanel = ({
     }
 
     return (
-      <div className="grid min-h-[220px] place-items-center rounded-2xl border border-dashed border-white/10 text-sm text-slate-500">
+      <div className="grid min-h-[220px] place-items-center rounded-2xl border border-dashed border-neutral-900 text-sm text-zinc-600">
         No image yet
       </div>
     );
   };
 
   return (
-    <div className="glass-card space-y-3 p-6">
+    <div className="card space-y-3 border-neutral-900 p-6">
       <div className="flex items-center justify-between text-sm">
-        <p className="text-white">{title}</p>
-        <span className="rounded-full border border-white/10 px-3 py-1 text-xs text-slate-400">
+        <p className="text-zinc-100">{title}</p>
+        <span className="rounded-full border border-neutral-900 px-3 py-1 text-xs text-zinc-500">
           {status}
         </span>
       </div>

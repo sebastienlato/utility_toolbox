@@ -7,14 +7,14 @@ import QrCodeGeneratorPage from "./features/tools/QrCodeGenerator/QrCodeGenerato
 
 const App = () => {
   return (
-    <div className="app-shell flex min-h-screen flex-col text-slate-100">
-      <header className="border-b border-white/10 px-6 py-4 backdrop-blur">
+    <div className="app-shell flex min-h-screen flex-col text-zinc-100">
+      <header className="border-b border-neutral-900/70 bg-black/80 px-6 py-4 backdrop-blur-sm">
         <div className="relative mx-auto flex h-16 w-full max-w-6xl items-center justify-between">
           <Link
             to="/"
-            className="group flex items-center gap-2 ml-10 focus-ring"
+            className="group ml-10 flex items-center gap-2 focus-ring"
           >
-            <div className="flex h-8 w-8 items-center justify-center rounded-full border border-emerald-400/40 bg-emerald-500/15 text-xs font-semibold text-emerald-300 transition group-hover:border-emerald-400/70 group-hover:text-white">
+            <div className="flex h-8 w-8 items-center justify-center rounded-full border border-neutral-800 bg-neutral-950 text-xs font-semibold text-neutral-200 transition group-hover:border-neutral-600 group-hover:text-white">
               UT
             </div>
             <span className="sr-only">Go to Useful Tools home</span>
@@ -22,7 +22,7 @@ const App = () => {
 
           <Link
             to="/"
-            className="absolute left-1/2 -translate-x-1/2 text-3xl font-bold tracking-wide text-white transition hover:text-emerald-300 focus-ring"
+            className="absolute left-1/2 -translate-x-1/2 text-3xl font-semibold tracking-wide text-neutral-200 transition hover:text-white focus-ring"
           >
             Useful Tools
           </Link>
@@ -44,7 +44,7 @@ const App = () => {
         </Routes>
       </main>
 
-      <footer className="border-t border-white/10 px-6 py-4 text-center text-sm text-slate-400 backdrop-blur">
+      <footer className="border-t border-neutral-900/70 bg-black/70 px-6 py-4 text-center text-sm text-zinc-500 backdrop-blur-sm">
         <div className="mx-auto w-full max-w-6xl">
           Built with React, Vite, and Tailwind — LatoDev ©{" "}
           {new Date().getFullYear()}

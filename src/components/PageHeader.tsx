@@ -7,15 +7,11 @@ type PageHeaderProps = {
 const PageHeader = ({ eyebrow, title, description }: PageHeaderProps) => {
   return (
     <div className="space-y-3">
-      {eyebrow ? (
-        <p className="text-xs uppercase tracking-[0.3em] text-emerald-300/70">
-          {eyebrow}
-        </p>
-      ) : null}
+      {eyebrow ? <p className="label text-[0.65rem]">{eyebrow}</p> : null}
       <div>
-        <h1 className="text-4xl font-semibold text-white">{title}</h1>
+        <h1 className="text-4xl font-semibold text-zinc-100">{title}</h1>
         {description ? (
-          <p className="mt-2 text-base text-slate-300">{description}</p>
+          <p className="mt-2 text-base text-zinc-400">{description}</p>
         ) : null}
       </div>
     </div>
