@@ -5,120 +5,112 @@
 <h1 align="center">Utility Toolbox</h1>
 
 <p align="center">
-  A Vite + React + TypeScript suite of production-ready utilities for designers, marketers, and engineers who need polished image and text workflows in the browser.
+  A curated set of browser-based productivity tools for designers, developers, and content creators — all bundled in a single Vite + React SPA.
 </p>
 
 ---
 
-## At a Glance
+## Overview
 
-- **11 tools, single shell** – every workflow lives under one responsive layout with shared navigation, theming, and state-handling patterns.
-- **React + Vite + Tailwind** – instant HMR in development and optimized builds via Vite, styled exclusively with Tailwind utilities.
-- **Feature isolation** – each tool has its own folder, hooks, and services under `src/features/tools`, keeping code paths easy to reason about.
-- **Composable services** – pure TypeScript helpers in `src/services` power mock data, file handling, and canvas work without leaking React concerns.
+Utility Toolbox brings together a dozen frequently used utilities (image helpers, PDF actions, text transformers, and more) inside a consistent dark UI. Everything runs in the browser, so uploads never leave your machine and results can be previewed instantly.
 
----
+## Highlights
 
-## Visual Tour
+- **Modular tools:** Each feature is isolated inside its own folder plus entry in the shared registry.
+- **Responsive UI:** Tailwind-driven layout with accessible focus states, glass panels, and light motion.
+- **Client-side processing:** Image, text, and PDF actions are completed locally via the Canvas API and supporting libraries.
+- **Zero backend setup:** Vite handles dev/prod builds, making it easy to deploy the generated static assets.
 
-<div align="center">
-  <img src="public/screenshots/screenshot1.png" alt="Utility Toolbox home grid" width="250" />
-  <img src="public/screenshots/screenshot2.png" alt="Background removal preview" width="250" />
-  <img src="public/screenshots/screenshot3.png" alt="Image renamer interface" width="250" />
-</div>
-<div align="center">
-  <img src="public/screenshots/screenshot4.png" alt="Image resizer queue" width="250" />
-  <img src="public/screenshots/screenshot5.png" alt="QR code generator form" width="250" />
-  <img src="public/screenshots/screenshot6.png" alt="Color and PDF utilities" width="250" />
-</div>
+## Available Tools
 
----
+| Tool | Category | Status | Description |
+| --- | --- | --- | --- |
+| Background Removal | Images | `beta` | Upload images and preview transparent cutouts. |
+| Image Renamer | Productivity | `stable` | Batch rename photos with counters and custom patterns. |
+| Image Resizer | Images | `stable` | Resize and optimize images while preserving aspect ratios. |
+| QR Code Generator | Text | `stable` | Turn any URL or text into a downloadable QR code. |
+| Image Compressor | Images | `experimental` | Reduce file sizes in-browser before sharing. |
+| Image Format Converter | Images | `experimental` | Convert between PNG, JPEG, and WEBP formats. |
+| PDF Tools | Documents | `experimental` | Merge PDFs client-side and export a combined file. |
+| Text Case Converter | Text | `experimental` | Quickly switch casing (lower, upper, title, slug, etc.). |
+| Color Palette Extractor | Images | `experimental` | Extract dominant colors from uploads and copy their codes. |
+| Favicon Generator | Images | `experimental` | Create favicon-ready icons in multiple resolutions. |
+| Image Filters | Images | `experimental` | Apply effects like blur, contrast, and grayscale. |
 
-## Tool Catalog
+Refer to `src/features/tools/toolRegistry.ts` whenever you add or edit a tool so the home page and routes stay in sync.
 
-| Tool                    | Route                      | Status       | Highlights                                                                                          |
-| ----------------------- | -------------------------- | ------------ | --------------------------------------------------------------------------------------------------- |
-| Background Removal      | `/background-removal`      | Beta         | Drag-and-drop uploads with before/after preview, mock progress states, and transparent PNG exports. |
-| Image Renamer           | `/image-renamer`           | Stable       | Batch rename files with custom patterns, delimiters, numbering, and optional extension changes.     |
-| Image Resizer           | `/image-resizer`           | Stable       | Canvas-based resizing queue with aspect locking, quality control, and per-file downloads.           |
-| QR Code Generator       | `/qr-code-generator`       | Stable       | Generate QR codes from URLs/text, tune error correction, and export PNGs.                           |
-| Image Compressor        | `/image-compressor`        | Experimental | Reduce file sizes client-side with adjustable quality targets.                                      |
-| Image Format Converter  | `/image-format-converter`  | Experimental | Convert images between PNG, JPG, and WEBP on the fly.                                               |
-| PDF Tools               | `/pdf-tools`               | Experimental | Reorder and merge PDF uploads entirely in the browser.                                              |
-| Text Case Converter     | `/text-case-converter`     | Experimental | Quickly toggle sentences, camelCase, snake_case, and uppercase/lowercase variants.                  |
-| Color Palette Extractor | `/color-palette-extractor` | Experimental | Detect dominant colors in an image and copy hex values instantly.                                   |
-| Favicon Generator       | `/favicon-generator`       | Experimental | Produce multi-size favicon sets plus PNG previews.                                                  |
-| Image Filters           | `/image-filters`           | Experimental | Apply blur, contrast, grayscale, and other filters with live previews.                              |
+## Tech Stack
 
----
-
-## Why It Works
-
-### 1. Unified Workspace
-
-Single shell (`src/App.tsx`) wires every route with React Router and keeps header/footer branding consistent. Shared layout primitives ensure each feature inherits the same keyboard and color-accessible interactions.
-
-### 2. Opinionated Components
-
-Buttons, drop zones, and cards live in `src/components`, giving tools a cohesive look while letting feature folders focus solely on domain logic.
-
-### 3. Service-First Logic
-
-Canvas operations, mock APIs, and helpers stay in `src/services`, making it trivial to reuse logic between tools or swap in real endpoints later.
-
----
-
-## Architecture Snapshot
-
-```text
-src/
-  App.tsx              # routes + chrome
-  main.tsx             # ReactDOM bootstrap
-  components/          # shared UI primitives
-  features/
-    home/              # hub page
-    tools/             # per-tool folders + toolRegistry.ts
-  services/            # framework-free helpers (image, pdf, text)
-public/
-  logo.png             # UT circle mark
-  screenshots/         # UI showcase assets
-```
-
-Refer to `architecture.md` for the authoritative guidelines when adding new modules or categories.
-
----
+- React 19 + React Router for UI and routing
+- TypeScript with strict typing across pages, hooks, and services
+- Vite 7 for lightning-fast dev server and optimized builds
+- Tailwind CSS for utility-first styling
+- Supporting libraries: `lucide-react`, `pdf-lib`, `qrcode.react`, and Canvas APIs
 
 ## Getting Started
 
-```bash
-# install dependencies
-npm install
+1. **Install dependencies**
 
-# start the Vite dev server
-npm run dev
+   ```bash
+   npm install
+   ```
 
-# run type-check + production build
-npm run build
+2. **Start the dev server**
+
+   ```bash
+   npm run dev
+   ```
+
+   The app boots at `http://localhost:5173` with hot module reloading.
+
+3. **Run quality checks**
+
+   ```bash
+   npm run lint
+   npm run build
+   npm run preview
+   ```
+
+   `npm run preview` serves the production build so you can smoke test before deploying.
+
+## Project Structure
+
+```
+src/
+  main.tsx           # Bootstraps React + Router
+  App.tsx            # Shell layout and route definitions
+  components/        # Shared UI such as buttons, cards, inputs
+  services/          # Framework-free helpers (image + PDF logic)
+  features/
+    home/            # Landing grid and hero content
+    tools/           # Individual tool folders + toolRegistry
+public/
+  logo.png
+  screenshots/
 ```
 
-Visit `http://localhost:5173` for local development with Hot Module Replacement.
+Adding a new category or module? Mirror the change in `architecture.md` so the documented boundaries remain accurate.
 
----
+## Screenshots
 
-## Available Scripts
+<table>
+  <tr>
+    <td><img src="public/screenshots/screenshot1.png" alt="Home view showcasing the tool grid" width="260" /></td>
+    <td><img src="public/screenshots/screenshot2.png" alt="Background removal workflow" width="260" /></td>
+    <td><img src="public/screenshots/screenshot3.png" alt="Image renamer configuration" width="260" /></td>
+  </tr>
+  <tr>
+    <td><img src="public/screenshots/screenshot4.png" alt="QR code generator output" width="260" /></td>
+    <td><img src="public/screenshots/screenshot5.png" alt="PDF tools interface" width="260" /></td>
+    <td><img src="public/screenshots/screenshot6.png" alt="Color palette extractor results" width="260" /></td>
+  </tr>
+</table>
 
-| Command           | Description                                                       |
-| ----------------- | ----------------------------------------------------------------- |
-| `npm run dev`     | Launch Vite with HMR.                                             |
-| `npm run build`   | Type-check via `tsc -b` and emit the optimized production bundle. |
-| `npm run preview` | Serve the built assets locally for final smoke tests.             |
-| `npm run lint`    | Run the flat ESLint config across all `.ts`/`.tsx` files.         |
+## Contributing
 
----
+1. Fork or branch from `main`.
+2. Build your tool inside `src/features/tools/YourTool`, adding optional hooks/services as needed.
+3. Register the tool in `toolRegistry.ts`, add a `<Route />` entry in `App.tsx`, and update documentation if you introduce a new category.
+4. Run `npm run lint`, `npm run build`, and `npm run preview` to ensure everything passes before opening a PR.
 
-## Development Notes
-
-- Update `architecture.md` whenever you add a new tool or shared module so contributors understand domain boundaries.
-- Co-locate Vitest + React Testing Library specs as `ComponentName.test.tsx` or `hookName.test.ts` to keep coverage close to the code.
-- Favor Tailwind utility classes; if patterns repeat, promote them to shared components or helper class strings for clarity.
-- Keep tool metadata in `src/features/tools/toolRegistry.ts` in sync with routes defined in `src/App.tsx`.
+Screenshots or GIFs are encouraged for visual changes until automated tests are in place.
