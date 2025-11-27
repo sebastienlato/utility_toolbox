@@ -6,6 +6,7 @@ import ImageCompressorPage from "./features/tools/ImageCompressor/ImageCompresso
 import ImageFormatConverterPage from "./features/tools/ImageFormatConverter/ImageFormatConverterPage";
 import ImageRenamerPage from "./features/tools/ImageRenamer/ImageRenamerPage";
 import ImageResizerPage from "./features/tools/ImageResizer/ImageResizerPage";
+import FaviconGeneratorPage from "./features/tools/FaviconGenerator/FaviconGeneratorPage";
 import PdfToolsPage from "./features/tools/PdfTools/PdfToolsPage";
 import QrCodeGeneratorPage from "./features/tools/QrCodeGenerator/QrCodeGeneratorPage";
 import TextCaseConverterPage from "./features/tools/TextCaseConverter/TextCaseConverterPage";
@@ -60,6 +61,7 @@ const App = () => {
             path="/color-palette-extractor"
             element={<ColorPaletteExtractorPage />}
           />
+          <Route path="/favicon-generator" element={<FaviconGeneratorPage />} />
         </Routes>
       </main>
 

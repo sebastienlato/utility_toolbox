@@ -87,4 +87,12 @@ export const tools: ToolMeta[] = [
     category: "Images",
     status: "experimental",
   },
+  {
+    id: "favicon-generator",
+    name: "Favicon Generator",
+    shortDescription: "Generate favicon-ready icons in multiple sizes.",
+    slug: "/favicon-generator",
+    category: "Images",
+    status: "experimental",
+  },
 ];
