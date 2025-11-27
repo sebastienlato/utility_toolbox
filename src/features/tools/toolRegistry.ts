@@ -95,4 +95,13 @@ export const tools: ToolMeta[] = [
     category: "Images",
     status: "experimental",
   },
+  {
+    id: "image-filters",
+    name: "Image Filters",
+    shortDescription:
+      "Apply visual filters like blur, contrast, and grayscale.",
+    slug: "/image-filters",
+    category: "Images",
+    status: "experimental",
+  },
 ];
