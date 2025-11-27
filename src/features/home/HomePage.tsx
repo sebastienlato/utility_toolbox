@@ -39,10 +39,10 @@ const HomePage = () => {
             <ToolCard
               key={tool.id}
               name={tool.name}
-              description={tool.description}
+              description={tool.shortDescription}
               status={tool.status}
               category={tool.category}
-              href={tool.path}
+              href={tool.slug}
             />
           ))}
         </div>
