@@ -45,6 +45,22 @@ const generateId = () => {
   return `${Date.now()}-${Math.random().toString(16).slice(2)}`;
 };
 
+const triggerDownload = (url: string, filename: string) => {
+  const link = document.createElement("a");
+  link.href = url;
+  link.download = filename;
+  link.style.display = "none";
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+};
+
+const waitForDownloadSlot = () =>
+  new Promise<void>((resolve) => {
+    // Chrome throttles rapid programmatic downloads; spacing avoids the cap.
+    setTimeout(resolve, 80);
+  });
+
 const useImageRenamer = () => {
   const [pattern, setPattern] = useState<PatternState>(defaultPattern);
   const [files, setFiles] = useState<InternalFile[]>([]);
@@ -126,10 +142,7 @@ const useImageRenamer = () => {
       revokeAfter = true;
     }
 
-    const link = document.createElement("a");
-    link.href = url;
-    link.download = entry.newName;
-    link.click();
+    triggerDownload(url, entry.newName);
 
     if (revokeAfter) {
       setTimeout(() => URL.revokeObjectURL(url), 1500);
@@ -137,8 +150,12 @@ const useImageRenamer = () => {
   }, []);
 
   const downloadAll = useCallback(async () => {
-    for (const entry of renamedFiles) {
-      await downloadFile(entry);
+    const queue = [...renamedFiles];
+    for (let index = 0; index < queue.length; index += 1) {
+      await downloadFile(queue[index]);
+      if (index < queue.length - 1) {
+        await waitForDownloadSlot();
+      }
     }
   }, [renamedFiles, downloadFile]);
 
