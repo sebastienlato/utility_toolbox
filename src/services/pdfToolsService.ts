@@ -10,7 +10,8 @@ const readFile = (file: File) => file.arrayBuffer();
 
 const createBlobFromPdf = async (pdfDoc: PDFDocument): Promise<PdfResult> => {
   const bytes = await pdfDoc.save();
-  const blob = new Blob([bytes], { type: "application/pdf" });
+  // pdf-lib always allocates a plain ArrayBuffer; its return type just doesn't say so.
+  const blob = new Blob([bytes as Uint8Array<ArrayBuffer>], { type: "application/pdf" });
   const url = URL.createObjectURL(blob);
   return { blob, url, pageCount: pdfDoc.getPageCount() };
 };
